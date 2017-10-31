@@ -1,0 +1,23 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IL_GetGlobalFieldSizeFromRaw                                     */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Attempts to find a given global field, and if found, stores the  */
+/*      result of raw value mapping in the IL Session's cached string.   */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      ils                                 IL Session                   */
+/*      szField                             Name of field                */
+/*      value                               Raw value of field           */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

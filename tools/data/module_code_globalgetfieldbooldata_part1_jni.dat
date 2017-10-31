@@ -1,0 +1,17 @@
+{
+    IFX_RETURN_STATUS status = IFX_ERROR;
+
+    if (hModule == NULL)
+    {
+        return IFX_ERROR;
+    }
+
+    JNIEnv* jniEnv;
+    if (0 != (*global_ptr_JVM)->AttachCurrentThreadAsDaemon(global_ptr_JVM, &jniEnv, NULL))
+        return IFX_ERROR;
+
+    CACHE_MODULE* cacheModule = (CACHE_MODULE*)hModule;
+
+    jobject boolObj = (*jniEnv)->NewObject(jniEnv, HandleCallbacks.HandleClass, HandleCallbacks.Constructor);
+    status = (*jniEnv)->CallIntMethod(jniEnv,
+            cacheModule->moduleObject,

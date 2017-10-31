@@ -1,0 +1,14 @@
+            strField,
+            floatObj);
+
+    if (status == IFX_SUCCESS)
+    {
+        float returnedFloat = (*jniEnv)->CallFloatMethod(jniEnv, floatObj, HandleCallbacks.GetFloatValue);
+        *pData = returnedFloat;
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, strField);
+	(*jniEnv)->DeleteLocalRef(jniEnv, floatObj);
+
+    return status;
+}

@@ -1,0 +1,27 @@
+{
+    IFX_RETURN_STATUS status = IFX_ERROR;
+
+    if (hModule == NULL || hElement == NULL)
+    {
+        return IFX_ERROR;
+    }
+
+    JNIEnv* jniEnv;
+    if (0 != (*global_ptr_JVM)->AttachCurrentThreadAsDaemon(global_ptr_JVM, &jniEnv, NULL))
+        return IFX_ERROR;
+
+    CACHE_MODULE* cacheModule = (CACHE_MODULE*)hModule;
+    CACHE_ELEMENT* cacheElement = (CACHE_ELEMENT*)hElement;
+
+    jobject positionObj = (*jniEnv)->NewObject(jniEnv, PositionCallbacks.PositionClass,
+            PositionCallbacks.Constructor,
+            pPosition->left,
+            pPosition->top,
+            pPosition->width,
+            pPosition->height,
+            pPosition->opacity,
+            pPosition->color);
+    if (positionObj != NULL)
+    {
+        status = (*jniEnv)->CallIntMethod(jniEnv,
+                cacheElement->elementObject,

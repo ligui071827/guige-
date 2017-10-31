@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Dave Schofield (Mentor Graphics (Ireland) Ltd - UK Branch) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" ecore:nsPrefix="Module" ecore:documentRoot="ModuleDocument">
+	<xs:include schemaLocation="includes/common.xsd"/>
+	<xs:include schemaLocation="includes/uid.xsd"/>
+	<xs:simpleType name="scopeType">
+		<xs:annotation>
+			<xs:documentation>Defines the scope of a field defined in a menu type</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="menu"/>
+			<xs:enumeration value="item"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="elementType">
+		<xs:annotation>
+			<xs:documentation>Type of the element</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="eventHandler"/>
+			<xs:enumeration value="graphic"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="linkAction">
+		<xs:annotation>
+			<xs:documentation>What the link will do (perform an action - synchronous or asynchronous, or open a menu)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="functionSync"/>
+			<xs:enumeration value="functionAsync"/>
+			<xs:enumeration value="menu"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="linkType">
+		<xs:sequence>
+			<xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Defines a parameter after the ? in the link URI.  Parameters are separated by a ;</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>Defines the name of the parameter before the =</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="type" type="valueType" use="required">
+						<xs:annotation>
+							<xs:documentation>Defines the type of the parameter value after the =.  Can be "string", "int", "float", "boolean" or "time".</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="defaultValue" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>The value to be used if the parameter is omitted.  If defaultValue is omitted, and the parameter is missing, "", 0 or false will be used.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="linkPrefix" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Defines the name of the link (before the ://) that is used to create elements of this type. Must be unique.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="bodyType" type="valueType" use="optional" default="string">
+			<xs:annotation>
+				<xs:documentation>Defines the type of the body data.  Body data proceeds the :// and precedes the ?  If omitted, any body data in the URI will be ignored.  Can be "string", "int", "float", "boolean" or "time".</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="defaultBody" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Defines the default value to be used for the body.  If there is no bodyType, the default value is not used.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="linkType" type="linkAction" default="functionSync">
+			<xs:annotation>
+				<xs:documentation>This specifies what action the link performs.  Permitted values are 'functionSync' (for synchronous link actions), 'functionAsync' (for asynchronous link actions) or 'menu' (for opening a menu page).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="fieldType" ecore:name="DataField">
+		<xs:complexContent>
+			<xs:extension base="abstractFieldType">
+				<xs:sequence>
+					<xs:element name="map" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>Defines a mapping from a raw system value to a string that Inflexion UI can understand.  The map list is only used for raw integer, float and string data.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" use="required">
+								<xs:annotation>
+									<xs:documentation>Value to be returned when the raw data meets the criteria of this data map.  This will frequently be an Inflexion UI token to allow the theme writer to choose a suitable graphic to represent the data.  The value string can contain one format specifier for int and float modes only (e.g. %d or %f), to incorporate the raw value into the returned value.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="from" type="xs:float" use="optional">
+								<xs:annotation>
+									<xs:documentation>Used for raw integer or float data only.  It defines the lower end of the integer / float range that will cause a match.  Must be less than or equal to "to".  This must be present when the raw data is of type integer or float.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="to" type="xs:float" use="optional">
+								<xs:annotation>
+									<xs:documentation>Used for raw integer or float data only.  It defines the upper end of the integer / float range that will cause a match.  Must be greater than or equal to "from".  This must be present when the raw data is of type integer or float.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="input" type="xs:string" use="optional">
+								<xs:annotation>
+									<xs:documentation>Used for raw string data only.  It defines the exact raw string that will cause a match.  This must be present when the raw data is of type string.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="boolInput" type="xs:boolean" use="optional">
+								<xs:annotation>
+									<xs:documentation>Used for boolean data only.  It defines the boolean value that will cause a match.  This must be present when the raw data is of type boolean.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="editType" use="optional">
+					<xs:annotation>
+						<xs:documentation>Defines whether the field can be edited using a common control, such as the Simple Edit.  If set, prototypes for the buffer sharing IFXM functions will be generated for this field  Currently, only 'string' is supported, and that the dataType must also be 'string' for this to work.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType ecore:name="FieldEditType">
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="string"/>
+							<xs:enumeration value=""/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="minValue" type="xs:float" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>The minimum legal value that this field can assume.  This must be present if the type is "int" or "float" and the field is to be modified by a touch region. This is ignored if the type is "time" or "string".</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="maxValue" type="xs:float" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>The maximum legal value that this field can assume.  This must be present if the type is "int" or "float" and the field is to be modified by a touch region. This is ignored if the type is "time" or "string".</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="classType" type="fieldClassType" use="optional">
+					<xs:annotation>
+						<xs:documentation>This attribute helps the Inflexion UI Express auto-populate the class list in the Layout Editor view, to simplify constructing menu layouts.  The type must be one of "graphic", "text", "plugin".  This should only be used if this field is designed to map to the 'resource' used to create an element.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="module" ecore:name="module">
+		<xs:annotation>
+			<xs:documentation>Defines an Integrated Module and all of its services.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="fields" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the global fields and mapping rules used to convert them into something that the UI Runtime Engine understands.  Every global field must appear in this section, and if no map is provided for the field a simple string fomat will be returned to UI Runtime Engine.  Note that global field names must be unique in the system (so cannot match with a global field from another module).</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="field" type="fieldType" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="links" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the function links that the module supports.  Link names must be unique.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="link" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Defines a function link URI string.  The format is "[link prefix]://[body]?[param1 name]=[param1 value];[param2 name]=[param2 value];...".  Link names must be unique.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="ModuleLink">
+									<xs:complexContent>
+										<xs:extension base="linkType">
+											<xs:attribute name="menu" type="xs:string">
+												<xs:annotation>
+													<xs:documentation>This refers to one of the menu type names in the menus section.  This attribute is ignored if linkType is set to 'functionSync' or 'functionAsync.  This must be set to something valid if the linkType is set to 'menu' or the UI Integrator tool will generate an error message.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="menus" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the dynamic menus supported by the module.  Link names must be unique.  Any static XML menus associated specifically with this module can also be listed to aid the Inflexion UI Express.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="menu" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Defines a menu</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="ModuleMenu">
+									<xs:sequence>
+										<xs:element name="fields" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the fields for this menu. If automated field mapping is required, the field must also define this mapping.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType ecore:name="MenuFieldsContainer">
+												<xs:sequence>
+													<xs:element name="field" maxOccurs="unbounded">
+														<xs:complexType ecore:name="MenuField">
+															<xs:complexContent>
+																<xs:extension base="fieldType">
+																	<xs:attribute name="context" type="scopeType" default="item">
+																		<xs:annotation>
+																			<xs:documentation>This specifies the intended scope of the field.  'Menu' field values vary by menu instance, but are the same for all menu items within an instance, and 'item' field values vary by menu item.</xs:documentation>
+																		</xs:annotation>
+																	</xs:attribute>
+																</xs:extension>
+															</xs:complexContent>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="optional">
+										<xs:annotation>
+											<xs:documentation>This is the name that the module will return when a menu of this type is opened.  This is only used when searching for menu insertions in packages.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="inherits" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>This is the name of another menu element.  This menu type shares the same set of fields as the parent menu type.  The module may return this menu type name when opened with the menu link URI associated with a parent menu.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="elements" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the plugin elements and event handlers supported by the module.  Link names must be unique.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="element" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Defines an element link URI string.  The format is "[link prefix]://[body]?[param1 name]=[param1 value];[param2 name]=[param2 value];...".  Link names must be unique.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="LinkElement">
+									<xs:complexContent>
+										<xs:extension base="linkType">
+											<xs:attribute name="type" type="elementType" use="required">
+												<xs:annotation>
+													<xs:documentation>Defines the type of the element.  Can be "eventHandler" or "graphic".</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="supportFields" type="xs:boolean" use="optional" default="false">
+												<xs:annotation>
+													<xs:documentation>Defines whether the element can expand field data requests. If "true", the GetFieldSize/Data function prototypes will be generated for string fields, and optionaly the functions for int and IFX_TIME fields if the module has any fields of those types.  If "false", those function prototypes will not be generated.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="supportStylus" type="xs:boolean" use="optional">
+												<xs:annotation>
+													<xs:documentation>Defines whether the element can process stylus / finger events.  If "true" a set of stylus-related function prototypes will be generated, otherwise the element will not handle stylus events directly (although it can still have a 'tap' action associated with it in the manner of a graphic or text element).  Note that only elements of type "graphic'" can handle stylus events - elements of type "eventHandler" will ignore this attribute.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="previewGraphic" type="xs:string" use="optional">
+												<xs:annotation>
+													<xs:documentation>Defines a PNG file name to be shown in the Inflexion UI Express previewer. This is is used only, if the type of the "element" is set to "graphic".  This is for preview purposes only.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="triggers" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>A module can invoke triggers in the UI Engine.  The theme handles it as though a physical key of the given scan code was pressed.  Each trigger that the module supports may be catered for by the theme if required.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="trigger" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Represents one trigger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>The friendly name presented to the theme writer in the Inflexion UI Express.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="key" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>The key that should trigger the action.  All digits and letters can be specified, together with the special values "select", "back", "up", "down", "left", "right", "#" and "*".  You may also specify platform-dependent key scan codes using the format "scan_N" (where N is the decimal numeric scan code)</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="description" type="xs:string" use="optional">
+										<xs:annotation>
+											<xs:documentation>Description should be used to inform the theme writer what the trigger is intended to do.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+			<xs:attribute name="name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Provides a name for the module</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="exclusivitySupport" type="xs:boolean" use="optional">
+				<xs:annotation>
+					<xs:documentation>Defines whether the module can request exclusivity.  If "true", the relevant function prototypes will be setup to allow the Integrated Module to support exclusivity.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

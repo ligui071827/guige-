@@ -1,0 +1,23 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_PaintElement                                                */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called periodically by UI Engine on each active */
+/*      buffered mode element to indicate that the UI Engine is about to */
+/*      re-render the element                                            */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hElement                            Element handle               */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

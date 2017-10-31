@@ -1,0 +1,14 @@
+            strField,
+            boolObj);
+
+    if (status == IFX_SUCCESS)
+    {
+        IFX_BOOL returnedBool = (*jniEnv)->CallIntMethod(jniEnv, boolObj, HandleCallbacks.GetIntValueFromBoolean);
+        *pData = returnedBool;
+    }
+
+    (*jniEnv)->DeleteLocalRef(jniEnv, strField);
+    (*jniEnv)->DeleteLocalRef(jniEnv, boolObj);
+
+    return status;
+}

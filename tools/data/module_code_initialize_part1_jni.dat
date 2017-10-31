@@ -1,0 +1,19 @@
+{
+    IFX_RETURN_STATUS status = IFX_ERROR;
+    JNIEnv* jniEnv;
+
+    if (0 == (*global_ptr_JVM)->AttachCurrentThreadAsDaemon(global_ptr_JVM, &jniEnv, NULL))
+    {
+        CACHE_MODULE* cacheModule = (CACHE_MODULE*)IFXF_malloc(sizeof(CACHE_MODULE));
+        if (cacheModule == NULL)
+            return IFX_ERROR;
+
+        memset(cacheModule, 0, sizeof(CACHE_MODULE));
+
+        // Register the methods upfront for faster access.
+        status = registerCallbacks(jniEnv);
+        if (status == IFX_SUCCESS)
+        {
+            cacheModule->moduleId = hModuleId;
+
+            //  Create a new module.

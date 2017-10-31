@@ -1,0 +1,25 @@
+#include "jni.h"
+
+/* The Java virtual machine running the engine. */
+extern JavaVM* global_ptr_JVM;
+
+/* Framework utility functions used by the integration layer */
+extern void print_message(const char *str);
+extern jobject FRWK_Get_Module_Object_From_Java(const char* moduleName);
+extern void * IFXF_malloc(int size);
+extern void IFXF_free(void *ptr);
+
+static int getWcharStringLength(const IFX_WCHAR *body)
+{
+    char *cString = (char *)body;
+    int  length = 0;
+
+    while (((char)*body) != '\0')
+    {
+        ++length;
+        cString++;
+        body++;
+    }
+
+    return length;
+}

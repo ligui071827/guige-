@@ -1,0 +1,26 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IL_SetItemFieldRaw                                               */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Attempts to find a given item field, and if found, ses           */
+/*      the value in raw form.                                           */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      ils                                 IL Session                   */
+/*      menuInfo                            Associated menu              */
+/*      item                                Item number                  */
+/*      szField                             Name of field                */
+/*      value                               Raw value of field           */
+/*      final                               Whether the value is final   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

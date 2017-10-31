@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	This is the package's project file: it is used to maintain a central list
+	of all the XML and resource files required by the package
+-->
+<designerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="inflexion_2.5.0/designerSettings.xsd" applicationDefinition="dummy.application" defaultShaderPackage="true">
+  <uiProject compatibility="2,5,0" projectGUID="cb5dd46f7c5c481b8494b4cd12ae8b9c" signature="manifest.sig" type="product">
+    <projectSettings name="DefaultShaders" version="1,0,0"/>
+    <projectFiles>
+      <fileSet>
+        <file path="Effects/high_alphalight_0.effect"/>
+        <file path="Effects/high_alphalight_1.effect"/>
+        <file path="Effects/high_alphalight_2.effect"/>
+        <file path="Effects/high_light_0.effect"/>
+        <file path="Effects/high_light_1.effect"/>
+        <file path="Effects/high_light_2.effect"/>
+        <file path="Effects/high_texlight_0.effect"/>
+        <file path="Effects/high_texlight_1.effect"/>
+        <file path="Effects/high_texlight_2.effect"/>
+        <file path="Effects/normal_alphalight_0.effect"/>
+        <file path="Effects/normal_alphalight_1.effect"/>
+        <file path="Effects/normal_alphalight_2.effect"/>
+        <file path="Effects/normal_background.effect"/>
+        <file path="Effects/normal_light_0.effect"/>
+        <file path="Effects/normal_light_1.effect"/>
+        <file path="Effects/normal_light_2.effect"/>
+        <file path="Effects/normal_texlight_0.effect"/>
+        <file path="Effects/normal_texlight_1.effect"/>
+        <file path="Effects/normal_texlight_2.effect"/>
+        <file excluded="true" path="FSL_imx5x.bat"/>
+        <file path="High/high_alphalight_0.frag"/>
+        <file path="High/high_alphalight_1.frag"/>
+        <file path="High/high_alphalight_2.frag"/>
+        <file path="High/high_light_0.frag"/>
+        <file path="High/high_light_0.vert"/>
+        <file path="High/high_light_1.frag"/>
+        <file path="High/high_light_1.vert"/>
+        <file path="High/high_light_2.frag"/>
+        <file path="High/high_light_2.vert"/>
+        <file path="High/high_texlight_0.frag"/>
+        <file path="High/high_texlight_0.vert"/>
+        <file path="High/high_texlight_1.frag"/>
+        <file path="High/high_texlight_1.vert"/>
+        <file path="High/high_texlight_2.frag"/>
+        <file path="High/high_texlight_2.vert"/>
+        <file path="Normal/normal_alphalight.frag"/>
+        <file path="Normal/normal_background.frag"/>
+        <file path="Normal/normal_background.vert"/>
+        <file path="Normal/normal_light.frag"/>
+        <file path="Normal/normal_light_0.vert"/>
+        <file path="Normal/normal_light_1.vert"/>
+        <file path="Normal/normal_light_2.vert"/>
+        <file path="Normal/normal_texlight.frag"/>
+        <file path="Normal/normal_texlight_0.vert"/>
+        <file path="Normal/normal_texlight_1.vert"/>
+        <file path="Normal/normal_texlight_2.vert"/>
+        <file excluded="true" path="source.bat"/>
+      </fileSet>
+    </projectFiles>
+  </uiProject>
+  <uiDeviceSettings>
+    <settings>
+      <font face="&quot;Arial.ttf&quot;" style="normal"/>
+    </settings>
+    <displays>
+      <display name="Primary">
+        <mode name="QVGA_P" defaultLink="node://UIFlow/root.node"/>
+      </display>
+    </displays>
+  </uiDeviceSettings>
+  <packagerConfigurations activeConfiguration="$$Default_com.mentor.inflexion.designer.model.PackagerConfiguration">
+    <packagerConfiguration name="$$Default_com.mentor.inflexion.designer.model.PackagerConfiguration" outputLocation="Output" outputType="DIR">
+      <defaultTools>
+        <defaultTool fileExtension="png" name="Proprietary format"/>
+        <defaultTool fileExtension="effect" name="None"/>
+      </defaultTools>
+    </packagerConfiguration>
+  </packagerConfigurations>
+</designerSettings>

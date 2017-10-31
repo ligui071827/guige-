@@ -1,0 +1,19 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_CacheStrFromSession                                         */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Returns the cache string related to a given IFXI_SESSION         */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      pSession                            IL Session                   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      Cache string, or NULL if error                                   */
+/*                                                                       */
+/*************************************************************************/

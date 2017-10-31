@@ -1,0 +1,20 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ShutDown                                                    */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Engine just before                */
+/*      unloading the IL.  It should do any final clean-up required.     */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         Always                       */
+/*                                                                       */
+/*************************************************************************/

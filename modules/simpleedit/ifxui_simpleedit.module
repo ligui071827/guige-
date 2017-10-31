@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright Mentor Graphics Corporation 2008
+
+    All Rights Reserved.
+
+ THIS WORK CONTAINS TRADE SECRET
+ AND PROPRIETARY INFORMATION WHICH IS THE
+ PROPERTY OF MENTOR GRAPHICS
+ CORPORATION OR ITS LICENSORS AND IS
+ SUBJECT TO LICENSE TERMS. 
+-->
+<module name="ifxuisimpleedit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="inflexion_2.0/moduleDefinition.xsd">
+	<fields>
+		<field name="simpleEditInputMode" previewValue="{autoCapWord}" dataType="int" defaultValue="{nonInputMode}">
+			<map value="{autoCapWord}" from="16" to="31"/>
+			<map value="{autoCapSentence}" from="32" to="63"/>
+			<map value="{lowerCase}" from="64" to="127"/>
+			<map value="{upperCase}" from="128" to="255"/>
+			<map value="{numeric}" from="256" to="511"/>
+		</field>
+	</fields>
+	<elements>
+		<element type="eventHandler" linkPrefix="simpleEdit" bodyType="string" supportFields="true">
+			<param name="style" type="string"/>
+			<param name="maxLength" type="int" defaultValue="10"/>
+			<param name="inputMode" type="string"/>
+			<param name="caretPosition" type="int" defaultValue="-1"/>
+		</element>
+	</elements>
+	<links>
+		<link linkPrefix="cycleInputMode"/>
+		<link linkPrefix="showOSK"/>
+		<link linkPrefix="hideOSK"/>
+	</links>
+</module>

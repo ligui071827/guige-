@@ -1,0 +1,17 @@
+                    hModuleId);
+
+            if (status == IFX_SUCCESS)
+            {
+                cacheModule->moduleObject = (*jniEnv)->NewGlobalRef(jniEnv, moduleObj);
+                *phModule = (IFX_HMODULE)cacheModule;
+            }
+            else
+            {
+                memset(cacheModule, 0, sizeof(CACHE_MODULE));
+                IFXF_free(cacheModule);
+            }
+        }
+    }
+
+    return status;
+}

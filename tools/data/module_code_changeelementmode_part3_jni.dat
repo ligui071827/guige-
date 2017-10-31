@@ -1,0 +1,38 @@
+                    newMode,
+                    cacheElement->renderContextObject);
+        }
+
+        (*jniEnv)->DeleteLocalRef(jniEnv, ifxDisplayObj);
+        (*jniEnv)->DeleteLocalRef(jniEnv, frameBuffer);
+    }
+    else if (newMode == IFX_MODE_ELEMENT_OPENGL_TEXTURE)
+    {
+        IFX_OPENGL_RENDER_CONTEXT* renderContextPtr = (IFX_OPENGL_RENDER_CONTEXT*)pContext;
+
+        /* Create a render context class */
+        renderContextObject = (*jniEnv)->NewObject(jniEnv, IfxDisplayCallbacks.OpenGLContextClass,
+                IfxDisplayCallbacks.OpenGLContextConstructor,
+                renderContextPtr->texture,
+                renderContextPtr->tex_width,
+                renderContextPtr->tex_height,
+                renderContextPtr->top,
+                renderContextPtr->left,
+                renderContextPtr->height,
+                renderContextPtr->width,
+                renderContextPtr->textureTarget,
+                renderContextPtr->secondaryTextures[0],
+                renderContextPtr->secondaryTextures[1],
+                renderContextPtr->secondaryTextures[2]);
+
+        if (renderContextObject == NULL)
+        {
+            return IFX_ERROR;
+        }
+        else
+        {
+            cacheElement->renderContextObject = (*jniEnv)->NewGlobalRef(jniEnv, renderContextObject);
+            (*jniEnv)->DeleteLocalRef(jniEnv, renderContextObject);
+        }
+
+        status = (*jniEnv)->CallIntMethod(jniEnv,
+                cacheElement->elementObject,

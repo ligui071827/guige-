@@ -1,0 +1,27 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ValidateGUID                                                */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Engine just before                */
+/*      loading the Base Package.  It should check the supplied GUID     */
+/*      against the known GUID.                                          */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      szGUID                              GUID to compare against      */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pValid                              Returns an INT32 indicating  */
+/*                                          whether the GUID was valid.  */
+/*                                          1 means it was valid, 0      */
+/*                                          means it was not.            */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

@@ -1,0 +1,96 @@
+/*
+    Field/method IDs and class object references.
+*/
+typedef struct _cache_module
+{
+    IFX_HMODULEID   moduleId;
+    jobject         moduleObject;
+} CACHE_MODULE;
+
+typedef union _cache_ifx_render_context
+{
+    IFX_OPENGL_RENDER_CONTEXT*   savedOpenGLRenderContext;
+    IFX_BUFFERED_RENDER_CONTEXT* savedElementBufferedContext;
+
+} CACHE_IFX_RENDER_CONTEXT;
+
+typedef struct _cache_element
+{
+    IFX_HELEMENTID   elementId;
+    jobject          elementObject;
+    jobject          byteBufferObject;
+    IFX_ELEMENT_MODE currentMode;
+    CACHE_IFX_RENDER_CONTEXT ifxRenderContext;
+    jobject          renderContextObject;
+} CACHE_ELEMENT;
+
+typedef struct _cache_buffer
+{
+    jobject         bufferObject;
+    jobject         byteBufferObject;
+    IFX_HMENU       bufferMenu;
+} CACHE_BUFFER;
+
+static struct
+{
+    jclass      IfxDisplayClass;
+    jfieldID    IfxDisplayFrameBuffer;
+    jmethodID   IfxDisplayConstructor;
+    jclass      BufferedContextClass;
+    jfieldID    BufferedContextPBuffer;
+    jmethodID   BufferedContextConstructor;
+    jclass      DirectContextClass;
+    jfieldID    DirectContextPDisplay;
+    jmethodID   DirectContextConstructor;
+    jclass      OpenGLContextClass;
+    jfieldID    OpenGLContextTexture;
+    jfieldID    OpenGLContextTex_Width;
+    jfieldID    OpenGLContextTex_Height;
+    jfieldID    OpenGLContextTop;
+    jfieldID    OpenGLContextLeft;
+    jfieldID    OpenGLContextHeight;
+    jfieldID    OpenGLContextWidth;
+    jfieldID    OpenGLContextTextureTarget;
+    jfieldID    OpenGLContextSecondaryTexture0;
+    jfieldID    OpenGLContextSecondaryTexture1;
+    jfieldID    OpenGLContextSecondaryTexture2;
+    jmethodID   OpenGLContextConstructor;
+} IfxDisplayCallbacks;
+
+static struct
+{
+    jclass      PropertyClass;
+    jfieldID    Mode;
+    jfieldID    RequiredBufferWidth;
+    jfieldID    RequiredBufferHeight;
+    jfieldID    Translucency;
+    jfieldID    HasPreMultipliedAlpha;
+    jmethodID   Constructor;
+} PropertyCallbacks;
+
+static struct
+{
+    jclass      PositionClass;
+    jmethodID   Constructor;
+} PositionCallbacks;
+
+static struct
+{
+    jclass      HandleClass;
+    jmethodID   Constructor;
+    jmethodID   GetIntValue;
+    jmethodID   GetFloatValue;
+    jmethodID   GetTimeValue;
+    jmethodID   GetIntValueFromBoolean;
+    jmethodID   IsByteBuffer;
+    jmethodID   GetByteBuffer;
+    jmethodID   GetStringValue;
+    jmethodID   GetEnumOrdial;
+} HandleCallbacks;
+
+static struct
+{
+    jclass      TheClass;
+    jmethodID   Constructor;
+    jmethodID   Initialize;
+    jmethodID   ShutDown;

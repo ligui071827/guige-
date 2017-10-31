@@ -1,0 +1,23 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_OpenMenu                                                    */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Engine when the user              */
+/*      clicks a link which opens a menu of a type served by the IL      */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      szLink                              Menu Link                    */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      phMenu                              Menu handle to fill in       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

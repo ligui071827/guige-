@@ -1,0 +1,15 @@
+IFX_HUI IFXI_HuiFromSession(IFXI_SESSION* pSession)
+{
+    return pSession->Ifx;
+}
+
+IFXI_STRING* IFXI_CacheStrFromSession(IFXI_SESSION* pSession)
+{
+    return &(pSession->cacheStr);
+}
+
+IFX_HEXCLUSIVITY IFXI_ExclSessionFromSession(IFXI_SESSION* pSession)
+{
+    return pSession->exclSession;
+}
+

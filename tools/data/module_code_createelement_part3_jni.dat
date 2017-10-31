@@ -1,0 +1,4 @@
+    if (elementObj != NULL)
+    {
+        cacheElement->elementObject = (*jniEnv)->NewGlobalRef(jniEnv, elementObj);
+        *phElement = (IFX_HELEMENT)cacheElement;

@@ -1,0 +1,19 @@
+{
+    IFX_RETURN_STATUS status = IFX_ERROR;
+
+    if (hModule == NULL)
+    {
+        return IFX_ERROR;
+    }
+
+    JNIEnv* jniEnv;
+    if (0 != (*global_ptr_JVM)->AttachCurrentThreadAsDaemon(global_ptr_JVM, &jniEnv, NULL))
+        return IFX_ERROR;
+
+    // Construct a new Element.
+    CACHE_MODULE* cacheModule = (CACHE_MODULE*)hModule;
+    CACHE_ELEMENT* cacheElement = (CACHE_ELEMENT*)IFXF_malloc(sizeof(CACHE_ELEMENT));
+    if (cacheElement == NULL)
+        return IFX_ERROR;
+
+    memset(cacheElement, 0, sizeof(CACHE_ELEMENT));

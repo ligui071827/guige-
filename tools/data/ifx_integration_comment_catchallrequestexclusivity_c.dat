@@ -1,0 +1,26 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_RequestExclusivity                                          */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Catch-all Module to request       */
+/*      exclusivity.                                                     */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hModuleID                           Module ID                    */
+/*      priority                            The priority of the module   */
+/*      timeout                             Time in milliseconds to wait */
+/*                                          to gain exclusivity before   */
+/*                                          returning if exclusivity can */
+/*                                          not be gained                */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

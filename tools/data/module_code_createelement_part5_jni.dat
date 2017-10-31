@@ -1,0 +1,10 @@
+
+		(*jniEnv)->DeleteLocalRef(jniEnv, elementObj);
+
+        status = IFX_SUCCESS;
+    }
+    else
+    {
+        memset(cacheElement, 0, sizeof(CACHE_ELEMENT));
+        IFXF_free(cacheElement);
+    }

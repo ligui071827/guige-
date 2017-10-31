@@ -1,0 +1,97 @@
+
+/* Generated utilities */
+
+static IFX_RETURN_STATUS IL_GetElementFieldSize(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_ELEMENT_INFO   *elementInfo,
+        const IFX_WCHAR            *szField);
+
+static IFX_RETURN_STATUS IL_GetItemFieldSize(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField);
+
+static IFX_RETURN_STATUS IL_GetMenuFieldSize(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField);
+
+static IFX_RETURN_STATUS IL_GetGlobalFieldSize(
+        IFXI_SESSION               *ils,
+        const IFX_WCHAR            *szField);
+
+static IFX_RETURN_STATUS IL_GetElementFieldRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_ELEMENT_INFO   *elementInfo,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE          *pValue);
+
+static IFX_RETURN_STATUS IL_GetItemFieldRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE          *pValue);
+
+static IFX_RETURN_STATUS IL_GetMenuFieldRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE          *pValue);
+
+static IFX_RETURN_STATUS IL_GetGlobalFieldRaw(
+        IFXI_SESSION               *ils,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE          *pValue);
+
+static IFX_RETURN_STATUS IL_SetElementFieldRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_ELEMENT_INFO   *elementInfo,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value,
+		IFX_INT32                   final);
+
+static IFX_RETURN_STATUS IL_SetItemFieldRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value,
+		IFX_INT32                   final);
+
+static IFX_RETURN_STATUS IL_SetMenuFieldRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value,
+		IFX_INT32                   final);
+
+static IFX_RETURN_STATUS IL_SetGlobalFieldRaw(
+        IFXI_SESSION               *ils,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value,
+		IFX_INT32                   final);
+
+static IFX_RETURN_STATUS IL_GetItemFieldSizeFromRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value);
+
+static IFX_RETURN_STATUS IL_GetMenuFieldSizeFromRaw(
+        IFXI_SESSION               *ils,
+        IFXI_MODULE_MENU_INFO      *menuInfo,
+        IFX_INT32                   item,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value);
+
+static IFX_RETURN_STATUS IL_GetGlobalFieldSizeFromRaw(
+        IFXI_SESSION               *ils,
+        const IFX_WCHAR            *szField,
+		IFXI_VARIANT_TYPE           value);
+

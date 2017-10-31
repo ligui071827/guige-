@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Mentor Graphics (Mentor Graphics (Ireland) Ltd - UK Branch) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" ecore:nsPrefix="Application" ecore:documentRoot="ApplicationDocument">
+	<xs:simpleType name="programmingLanguageType">
+		<xs:annotation>
+			<xs:documentation>Enter "c" or "java"</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="java"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="applicationDefinition" ecore:name="applicationDefinition">
+		<xs:complexType ecore:name="ApplicationDefinition">
+			<xs:all>
+				<xs:element name="supportedModules" ecore:name="modulesContainer">
+					<xs:annotation>
+						<xs:documentation>Defines the modules that are supported by the application.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="SupportedModulesContainer">
+						<xs:sequence>
+							<xs:element name="support" maxOccurs="unbounded" ecore:name="supportedModules">
+								<xs:annotation>
+									<xs:documentation>Defines a supported module.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="SupportedModule">
+									<xs:attribute name="module" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>The path of the module definition file.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="programmingLanguage" type="programmingLanguageType" use="optional" default="c">
+										<xs:annotation>
+											<xs:documentation>The language this module is written in. Can be c (default) or java.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="enableCatchAll" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>If true, a catch-all module can be used that will be queried if no other module supplies the data.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="entryPoints" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the entry points available for this application.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="EntryPointsContainer">
+						<xs:sequence>
+							<xs:element name="entryPoint" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Defines an entry point.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="ApplicationEntryPoint">
+									<xs:attribute name="id" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>The identifying string for this entry point.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+			<xs:attribute name="name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Defines a name for the application definition.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="GUID" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>GUID identifier used to ensure that Base Packages on a device were created from the correct device Definition.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="deviceDefinition" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>The path of the device definition file this application supports.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="packageName" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>If this application contains Java modules then this string will be used to define the package.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="description" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>Description of the application definition for theme writers.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

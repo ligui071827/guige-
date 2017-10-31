@@ -1,0 +1,4 @@
+static struct
+{
+    jclass      TheClass;
+    jmethodID   Constructor;

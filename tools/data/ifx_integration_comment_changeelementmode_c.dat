@@ -1,0 +1,29 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ChangeElementMode                                           */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called to switch a plugin element to a new      */
+/*      rendering mode, and pass the appropriate rendering context to    */
+/*      the module.                                                      */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hElement                            Element handle               */
+/*      newMode                             Required new mode for element*/
+/*      pContext                            Context object containing    */
+/*                                          information required by the  */
+/*                                          integrated module to render  */
+/*                                          the element for the current  */
+/*                                          element mode                 */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

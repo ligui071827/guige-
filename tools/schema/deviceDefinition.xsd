@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 sp1 (x64) (http://www.altova.com) by Dave Cook (Mentor Graphics (Ireland) Ltd UK Branch) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" ecore:nsPrefix="Device" ecore:documentRoot="DeviceDocument">
+	<xs:include schemaLocation="includes/common.xsd"/>
+	<xs:simpleType name="renderModeType">
+		<xs:annotation>
+			<xs:documentation>Enter "2d", "2.5d", "gles1.1" or "gles2.0"</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="2d"/>
+			<xs:enumeration value="2.5d"/>
+			<xs:enumeration value="gles1.1"/>
+			<xs:enumeration value="gles2.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="deviceDefinition">
+		<xs:complexType ecore:name="DeviceDefinition">
+			<xs:all>
+				<xs:element name="graphicalCapabilities">
+					<xs:annotation>
+						<xs:documentation>Defines the graphical capabilities for this device.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="GraphicalCapabilities">
+						<xs:sequence>
+							<xs:element name="maximumTextureDimensions" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The maximum texture dimensions for this device.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="TextureDimension">
+									<xs:attribute name="width" type="xs:int" use="optional">
+										<xs:annotation>
+											<xs:documentation>The maximum width of an OpenGL texture.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="height" type="xs:int" use="optional">
+										<xs:annotation>
+											<xs:documentation>The maximum height of an OpenGL texture.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="lightCount" type="xs:int" use="optional">
+							<xs:annotation>
+								<xs:documentation>The total number of OpenGL lights the device supports.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="colorDepth" type="xs:int">
+							<xs:annotation>
+								<xs:documentation>Bits-per-pixel of the device screen.  If the colorDepth is 16 and the runtime is in OpenGL mode, whole-scene dithering will be used.  In this case, the UIPackager tool will not dither individual images if they are marked for dithering by the packager.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="displays" ecore:name="displaysContainer">
+					<xs:annotation>
+						<xs:documentation>Defines the displays that are present on the device.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="SupportedDisplaysContainer">
+						<xs:sequence>
+							<xs:element name="display" maxOccurs="unbounded" ecore:name="supportedDisplays">
+								<xs:annotation>
+									<xs:documentation>Defines a physical display.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="DeviceDisplay">
+									<xs:sequence>
+										<xs:element name="support" maxOccurs="unbounded" ecore:name="supportedModes">
+											<xs:annotation>
+												<xs:documentation>Defines a supported display mode for the display.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType ecore:name="SupportedDisplayMode">
+												<xs:attribute name="mode" type="xs:string" use="required">
+													<xs:annotation>
+														<xs:documentation>References a display mode by name.</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>Defines a name for the display.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="description" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>Defines a friendly description of the display for use in the Inflexion UI Express.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="defaultMode" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>Selects one of the list of modes in the 'support' list to be used if the application does not specify a preferred mode.  If this is missing, then the first element in the 'support' list will be used as the default mode.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="keys" minOccurs="0" ecore:name="keysContainer">
+					<xs:annotation>
+						<xs:documentation>This section defines any special hardware keys available on the device. This list should not include the predefined keys, "select", "back", "up", "down", "left", "right", "#" and "*" 0-9, A-Z and a-z.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="KeysContainer">
+						<xs:sequence>
+							<xs:element name="key" maxOccurs="unbounded" ecore:name="keys">
+								<xs:annotation>
+									<xs:documentation>Defines a hardware key on the device</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="Key">
+									<xs:complexContent>
+										<xs:extension base="keySettingsType">
+											<xs:attribute name="description" type="xs:string" use="optional">
+												<xs:annotation>
+													<xs:documentation>Description should be used to inform the theme writer what the key is intended to do.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="languages" ecore:name="languagesContainer">
+					<xs:annotation>
+						<xs:documentation>Defines a pool of languages for use by devices.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="LanguagesContainer">
+						<xs:sequence>
+							<xs:element name="language" maxOccurs="unbounded" ecore:name="languages">
+								<xs:annotation>
+									<xs:documentation>Defines an individual language.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="Language">
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>Defines the name of the language as a two character code in the ISO639-1 format.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="description" type="xs:string" use="optional">
+										<xs:annotation>
+											<xs:documentation>Defines a friendly name or description of the language for use by the Inflexion UI Express.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="displayModes" ecore:name="displayModesContainer">
+					<xs:annotation>
+						<xs:documentation>Defines a pool of display modes for use by devices.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="DisplayModesContainer">
+						<xs:sequence>
+							<xs:element name="displayMode" maxOccurs="unbounded" ecore:name="displayModes">
+								<xs:annotation>
+									<xs:documentation>Defines a display mode.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="DisplayMode">
+									<xs:complexContent>
+										<xs:extension base="abstractDisplayModeType">
+											<xs:attribute name="description" type="xs:string">
+												<xs:annotation>
+													<xs:documentation>Defines a friendly description of the display mode for use in the Inflexion UI Express.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="designSizes" ecore:name="designSizesContainer">
+					<xs:annotation>
+						<xs:documentation>Defines a pool of design sizes for use by templates.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="DesignSizesContainer">
+						<xs:sequence>
+							<xs:element name="designSize" maxOccurs="unbounded" ecore:name="designSizes">
+								<xs:annotation>
+									<xs:documentation>Defines a design size. Design sizes are referenced by templates and used to enforce that the template is compatible with the display mode in use.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="DesignSize">
+									<xs:complexContent>
+										<xs:extension base="basicDesignSizeType">
+											<xs:attribute name="height" type="xs:int" use="required">
+												<xs:annotation>
+													<xs:documentation>Defines the height of the design size in pixels.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="description" type="xs:string">
+												<xs:annotation>
+													<xs:documentation>Defines a friendly description of the design size for use in the Inflexion UI Express.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="targetConfigurations" minOccurs="0" ecore:name="targetConfigurationsContainer">
+					<xs:annotation>
+						<xs:documentation>Allows configuration for theme deployment to a specific target.  For example, this will allow certain parts of the theme to be specially handled in the packaging step for optimal performance on a particular target hardware.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="TargetConfigurationsContainer">
+						<xs:sequence>
+							<xs:element name="targetConfiguration" maxOccurs="unbounded" ecore:name="targetConfigurations">
+								<xs:annotation>
+									<xs:documentation>A set of configuration data used by the packaging tool when preparing the theme for target deployment</xs:documentation>
+								</xs:annotation>
+								<xs:complexType ecore:name="TargetConfiguration">
+									<xs:sequence minOccurs="0">
+										<xs:element name="translationTools" minOccurs="0" ecore:name="translationToolsContainer">
+											<xs:annotation>
+												<xs:documentation>You may specify a set of tools used to translate or process source files during the packaging step here</xs:documentation>
+											</xs:annotation>
+											<xs:complexType ecore:name="TranslationToolsContainer">
+												<xs:sequence>
+													<xs:element name="translationTool" type="translationToolType" maxOccurs="unbounded" ecore:name="translationTools">
+														<xs:annotation>
+															<xs:documentation>Each tool to be used in the packaging process must have a translationTool entry.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>Helpful name for the configuration - this should be meaningful for the theme designer and unique for each configuration within this list.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+			<xs:attribute name="name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Defines a name for the device.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="description" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>Description of the device for theme writers.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="translationToolType" ecore:name="TranslationTool">
+		<xs:attribute name="toolName" type="xs:string" use="required" ecore:name="name">
+			<xs:annotation>
+				<xs:documentation>Friendly name for the translation tool, for use by the theme designer.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="toolType" type="translationToolUse" use="required" ecore:name="type">
+			<xs:annotation>
+				<xs:documentation>This indicates the type of tool.  Choices are: 'shaderCompiler' (tools which compile shader source code), or 'imageFileConverter' (tools which convert source image data into a format other than the Inflexion file format).  The latter container file format is assumed to embed the format of the contents within the file type (including any compression format id, mipmap levels etc).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Helpful description of the tool, purpose and usage.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="executable" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Executable file name, with any path information that is required.  Please ensure that opening a command prompt and entering this string exactly results in the tool being launched.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="body" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>String to be used after the executable name.  If this is empty, the path and name of the target file for the translation operation will be used.  If this is not empy, it should contain the sequence '$1', which will be expanded to the path and filename of the target file.  Certain translation tools operate on more than one file target (such as binary shader compilers that produce a unified, combined shader object) - in these cases, the sequence '$2' will expand to the second target file path and name, and so on.  Where a particular translation tool allows the naming of the output file from the translation step, the body should include the token'$0', which will be replaced with the appropriate output file name.  If the format of the command line parameter requires the use of the '$' symbol, it must be escaped using '$' - i.e. "-option $$" will result in "-option $" being passed to the tool.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="unifiedShaderOutput" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation>Boolean flag for tools of the type 'shaderCompiler'.  If this is 'true', then the compiler produces a single unified shader program output from the two shader file inputs.  In this case executable2 and body2 are ignored, and body must contain the symbols $1, $2 representing the vertex and fragement shaders respectively.  The default is 'false', meaning that the tool(s) produces separate binary objects for the vertex and fragment shaders.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="executable2" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>For translation tools of the type 'shaderCompiler' where 'unifiedShaderOutput' is false, you may define a second tool for use with the fragment (*.frag) shader source.  If this is missing, the tool named in the 'executable' attribute willl be used.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="body2" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>For translation tools of the type 'shaderCompiler' where 'unifiedShaderOutput' is false, you may define a second executable body for use with the fragment (*.frag) shader source.  If this is missing, the body named in the 'body' attribute willl be used.  If 'executable2' is present, this body will be applied to that executable, otherwise it will be used with 'executable'.  The token '$2' will be expanded to the fragment shader source file. Where a particular translation tool allows the naming of the output file from the translation step, the body should include the token'$0', which will be replaced with the appropriate output file name.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="compiledShaderFormat" type="xs:int" default="-1">
+			<xs:annotation>
+				<xs:documentation>For compiled shaders, this value should be set to the apropriate GLenum value that must be passed in to the glShaderFormat call indicating the format of the binary shader.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="imageOutputFileExtension" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>File extension of the ‘packaged’ image.  This must be a file extension recognized by the Image unpacking Porting Layer API.  For example, for .dds files, this would be ‘.dds’.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="translationToolUse" ecore:name="TranslationToolType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="shaderCompiler"/>
+			<xs:enumeration value="imageFileConverter"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

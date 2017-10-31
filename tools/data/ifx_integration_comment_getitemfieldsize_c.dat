@@ -1,0 +1,24 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IL_GetItemFieldSize                                              */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Attempts to find a given item field, and if found, stores the    */
+/*      result in the IL Session's cached string.                        */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      ils                                 IL Session                   */
+/*      menuInfo                            Associated menu              */
+/*      item                                Item number                  */
+/*      szField                             Name of field                */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

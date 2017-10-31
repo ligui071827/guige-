@@ -1,0 +1,17 @@
+#include "ifxui_defs.h"
+
+typedef enum
+{
+    ETypeInt,
+    ETypeString,
+    ETypeTime
+} EValueType;
+
+typedef struct
+{
+    const IFX_WCHAR *group;
+    const IFX_WCHAR *setting;
+    const IFX_WCHAR *defaultValue;
+    EValueType       type;
+} REPOSITORY_SETTING;
+

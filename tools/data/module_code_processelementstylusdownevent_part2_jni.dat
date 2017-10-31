@@ -1,0 +1,14 @@
+			x,
+			y,
+            intObj);
+
+    if (status == IFX_SUCCESS)
+    {
+        IFX_INT32 returnedInt = (*jniEnv)->CallIntMethod(jniEnv, intObj, HandleCallbacks.GetIntValueFromBoolean);
+        *pConsumed = returnedInt;
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, intObj);
+
+    return status;
+}

@@ -1,0 +1,25 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IL_SetElementFieldRaw                                            */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Attempts to find a given element field, and if found, sets       */
+/*      the value in raw form.                                           */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      ils                                 IL Session                   */
+/*      elementInfo                         Associated element           */
+/*      szField                             Name of field                */
+/*      value                               New raw value of field       */
+/*      final                               Whether the value is final   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

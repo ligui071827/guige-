@@ -1,0 +1,19 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_HuiFromSession                                              */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Returns the IFX_HUI handle related to a given IFXI_SESSION       */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      pSession                            IL Session                   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_HUI handle, or NULL if error                                 */
+/*                                                                       */
+/*************************************************************************/

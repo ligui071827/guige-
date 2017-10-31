@@ -1,0 +1,22 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_GetLinkTypeCount                                            */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Used to query how many link type names are supported by the IL   */
+/*      (both for function links and menu links)                         */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pCount                              The count of link type names */
+/*                                          that the IL recognizes.      */
+/*      IFX_SUCCESS                         Always                       */
+/*                                                                       */
+/*************************************************************************/

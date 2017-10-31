@@ -1,0 +1,334 @@
+/*-------------------------------------------------------------------------*//**
+    Perform the Display lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerDisplayCallbacks(JNIEnv* env)
+{
+    jclass IfxDisplayClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Module$IfxDisplay");
+    if (IfxDisplayClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Module$IfxDisplay\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.IfxDisplayClass = (jclass)(*env)->NewGlobalRef(env, IfxDisplayClass);
+    if (IfxDisplayCallbacks.IfxDisplayClass == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.IfxDisplayFrameBuffer = (*env)->GetFieldID(env, IfxDisplayCallbacks.IfxDisplayClass, "frameBuffer", "Ljava/nio/ByteBuffer;");
+    if (IfxDisplayCallbacks.IfxDisplayFrameBuffer == NULL)
+    {
+        print_message("Cannot find the ifxDisplay frameBuffer field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.IfxDisplayConstructor = (*env)->GetMethodID(env, IfxDisplayCallbacks.IfxDisplayClass, "<init>",  "(IIIIIII)V");
+    if (IfxDisplayCallbacks.IfxDisplayConstructor == NULL)
+    {
+        print_message("Cannot find ifxDisplay Constructor\n");
+        return IFX_ERROR;
+    }
+
+    jclass BufferedContextClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Module$IfxBufferedRenderContext");
+    if (BufferedContextClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Module$IfxBufferedRenderContext\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.BufferedContextClass = (jclass)(*env)->NewGlobalRef(env, BufferedContextClass);
+    if (IfxDisplayCallbacks.BufferedContextClass == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.BufferedContextPBuffer = (*env)->GetFieldID(env, IfxDisplayCallbacks.BufferedContextClass, "pBuffer", "Ljava/nio/ByteBuffer;");
+    if (IfxDisplayCallbacks.BufferedContextPBuffer == NULL)
+    {
+        print_message("Cannot find Buffered Context pBuffer field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.BufferedContextConstructor = (*env)->GetMethodID(env, IfxDisplayCallbacks.BufferedContextClass, "<init>",  "(IIII)V");
+    if (IfxDisplayCallbacks.BufferedContextConstructor == NULL)
+    {
+        print_message("Cannot find Buffered Context Constructor\n");
+        return IFX_ERROR;
+    }
+
+    jclass OpenGLContextClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Module$IfxOpenGLRenderContext");
+    if (OpenGLContextClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Module$IfxOpenGLRenderContext\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextClass = (jclass)(*env)->NewGlobalRef(env, OpenGLContextClass);
+    if (IfxDisplayCallbacks.OpenGLContextClass == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextConstructor = (*env)->GetMethodID(env, IfxDisplayCallbacks.OpenGLContextClass, "<init>",  "(IIIIIIIIIII)V");
+    if (IfxDisplayCallbacks.OpenGLContextConstructor == NULL)
+    {
+        print_message("Cannot find OpenGL Context Constructor\n");
+        return IFX_ERROR;
+    }
+
+    IfxDisplayCallbacks.OpenGLContextTexture = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "texture", "I");
+    if (IfxDisplayCallbacks.OpenGLContextTexture == NULL)
+    {
+        print_message("Cannot find the OpenGL Context texture field\n");
+        return IFX_ERROR;
+    }
+
+    IfxDisplayCallbacks.OpenGLContextTex_Width = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "tex_width", "I");
+    if (IfxDisplayCallbacks.OpenGLContextTex_Width == NULL)
+    {
+        print_message("Cannot find the OpenGL Context tex_width field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextTex_Height = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "tex_height", "I");
+    if (IfxDisplayCallbacks.OpenGLContextTex_Height == NULL)
+    {
+        print_message("Cannot find the OpenGL Context tex_height field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextTop = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "top", "I");
+    if (IfxDisplayCallbacks.OpenGLContextTop == NULL)
+    {
+        print_message("Cannot find the OpenGL Context top field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextLeft = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "left", "I");
+    if (IfxDisplayCallbacks.OpenGLContextLeft == NULL)
+    {
+        print_message("Cannot find the OpenGL Context left field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextHeight = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "height", "I");
+    if (IfxDisplayCallbacks.OpenGLContextHeight == NULL)
+    {
+        print_message("Cannot find the OpenGL Context height field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextWidth = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "width", "I");
+    if (IfxDisplayCallbacks.OpenGLContextWidth == NULL)
+    {
+        print_message("Cannot find the OpenGL Context width field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextTextureTarget = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "textureTarget", "I");
+    if (IfxDisplayCallbacks.OpenGLContextTextureTarget == NULL)
+    {
+        print_message("Cannot find the OpenGL Context textureTarget field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextSecondaryTexture0 = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "secondaryTexture_0", "I");
+    if (IfxDisplayCallbacks.OpenGLContextSecondaryTexture0 == NULL)
+    {
+        print_message("Cannot find the OpenGL Context secondaryTexture_0 field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextSecondaryTexture1 = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "secondaryTexture_1", "I");
+    if (IfxDisplayCallbacks.OpenGLContextSecondaryTexture1 == NULL)
+    {
+        print_message("Cannot find the OpenGL Context secondaryTexture_1 field\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.OpenGLContextSecondaryTexture2 = (*env)->GetFieldID(env, IfxDisplayCallbacks.OpenGLContextClass, "secondaryTexture_2", "I");
+    if (IfxDisplayCallbacks.OpenGLContextSecondaryTexture2 == NULL)
+    {
+        print_message("Cannot find the OpenGL Context secondaryTexture_2 field\n");
+        return IFX_ERROR;
+    }
+
+    jclass DirectContextClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Module$IfxDirectRenderContext");
+    if (DirectContextClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Module$IfxDirectRenderContext\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.DirectContextClass = (jclass)(*env)->NewGlobalRef(env, DirectContextClass);
+    if (IfxDisplayCallbacks.DirectContextClass == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.DirectContextConstructor = (*env)->GetMethodID(env, IfxDisplayCallbacks.DirectContextClass, "<init>",  "(III)V");
+    if (IfxDisplayCallbacks.DirectContextConstructor == NULL)
+    {
+        print_message("Cannot find Direct Context Constructor\n");
+        return IFX_ERROR;
+    }
+    IfxDisplayCallbacks.DirectContextPDisplay = (*env)->GetFieldID(env, IfxDisplayCallbacks.DirectContextClass, "pDisplay", "Lcom/mentorgraphics/inflexionui/modules/Module$IfxDisplay;");
+    if (IfxDisplayCallbacks.DirectContextPDisplay == NULL)
+    {
+        print_message("Cannot find the ifxDisplay pDisplay field\n");
+        return IFX_ERROR;
+    }
+    return IFX_SUCCESS;
+}
+
+/*-------------------------------------------------------------------------*//**
+    Perform the Property lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerPropertyCallbacks(JNIEnv* env)
+{
+    jclass PropertyClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Module$IfxElementProperty");
+    if (PropertyClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Module$IfxDisplay\n");
+        return IFX_ERROR;
+    }
+    PropertyCallbacks.PropertyClass = (jclass)(*env)->NewGlobalRef(env, PropertyClass);
+    if (PropertyCallbacks.PropertyClass == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+
+    PropertyCallbacks.Mode = (*env)->GetFieldID(env, PropertyCallbacks.PropertyClass, "mode", "I");
+    if (PropertyCallbacks.Mode == NULL)
+    {
+        print_message("Cannot find the Property Mode field\n");
+        return IFX_ERROR;
+    }
+    PropertyCallbacks.RequiredBufferWidth = (*env)->GetFieldID(env, PropertyCallbacks.PropertyClass, "requiredBufferWidth", "I");
+    if (PropertyCallbacks.RequiredBufferWidth == NULL)
+    {
+        print_message("Cannot find the Property requiredBufferWidth field\n");
+        return IFX_ERROR;
+    }
+    PropertyCallbacks.RequiredBufferHeight = (*env)->GetFieldID(env, PropertyCallbacks.PropertyClass, "requiredBufferHeight", "I");
+    if (PropertyCallbacks.RequiredBufferHeight == NULL)
+    {
+        print_message("Cannot find the Property requiredBufferHeight field\n");
+        return IFX_ERROR;
+    }
+    PropertyCallbacks.Translucency = (*env)->GetFieldID(env, PropertyCallbacks.PropertyClass, "translucency", "I");
+    if (PropertyCallbacks.Translucency == NULL)
+    {
+        print_message("Cannot find the Property translucency field\n");
+        return IFX_ERROR;
+    }
+    PropertyCallbacks.HasPreMultipliedAlpha = (*env)->GetFieldID(env, PropertyCallbacks.PropertyClass, "hasPreMultipliedAlpha", "I");
+    if (PropertyCallbacks.HasPreMultipliedAlpha == NULL)
+    {
+        print_message("Cannot find the Property hasPreMultipliedAlpha field\n");
+        return IFX_ERROR;
+    }
+    PropertyCallbacks.Constructor = (*env)->GetMethodID(env, PropertyCallbacks.PropertyClass, "<init>", "(IIIII)V");
+    if (PropertyCallbacks.Constructor == NULL)
+    {
+        print_message("Cannot find Property Constructor\n");
+        return IFX_ERROR;
+    }
+    return IFX_SUCCESS;
+}
+
+/*-------------------------------------------------------------------------*//**
+    Perform the Position lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerPositionCallbacks(JNIEnv* env)
+{
+    jclass PositionClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Module$IfxPosition");
+    if (PositionClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Module$IfxPosition\n");
+        return IFX_ERROR;
+    }
+    PositionCallbacks.PositionClass = (jclass)(*env)->NewGlobalRef(env, PositionClass);
+    if (PositionCallbacks.PositionClass == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+
+    PositionCallbacks.Constructor = (*env)->GetMethodID(env, PositionCallbacks.PositionClass, "<init>", "(IIIIII)V");
+    if (PositionCallbacks.Constructor == NULL)
+    {
+        print_message("Cannot find Position Constructor\n");
+        return IFX_ERROR;
+    }
+    return IFX_SUCCESS;
+}
+
+/*-------------------------------------------------------------------------*//**
+    Perform the Handle lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerHandleCallbacks(JNIEnv* env)
+{
+    jclass HandleClass = (*env)->FindClass(env, "com/mentorgraphics/inflexionui/modules/Handle");
+    if (HandleClass == NULL)
+    {
+        print_message("Cannot find class com/mentorgraphics/inflexionui/modules/Handle\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.HandleClass = (jclass)(*env)->NewGlobalRef(env, HandleClass);
+    if (HandleCallbacks.HandleClass  == NULL)
+    {
+        print_message("Cannot create new global ref\n");
+        return IFX_ERROR;
+    }
+
+    HandleCallbacks.Constructor = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "<init>", "()V");
+    if (HandleCallbacks.Constructor == NULL)
+    {
+        print_message("Cannot find handle Constructor\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetIntValue = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getIntValue", "()I");
+    if (HandleCallbacks.GetIntValue == NULL)
+    {
+        print_message("Cannot find handle getIntValue\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetFloatValue = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getFloatValue", "()F");
+    if (HandleCallbacks.GetFloatValue == NULL)
+    {
+        print_message("Cannot find handle getFloatValue\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetTimeValue = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getTimeValue", "()J");
+    if (HandleCallbacks.GetTimeValue == NULL)
+    {
+        print_message("Cannot find handle getTimeValue\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetIntValueFromBoolean = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getIntValueFromBoolean", "()I");
+    if (HandleCallbacks.GetIntValueFromBoolean == NULL)
+    {
+        print_message("Cannot find handle getIntValueFromBoolean\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.IsByteBuffer = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "isByteBuffer", "()Z");
+    if (HandleCallbacks.IsByteBuffer == NULL)
+    {
+        print_message("Cannot find handle isByteBuffer\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetByteBuffer = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getByteBuffer", "()Ljava/nio/ByteBuffer;");
+    if (HandleCallbacks.GetByteBuffer == NULL)
+    {
+        print_message("Cannot find handle getByteBuffer\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetStringValue = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getStringValue", "()Ljava/lang/String;");
+    if (HandleCallbacks.GetStringValue == NULL)
+    {
+        print_message("Cannot find handle getStringValue\n");
+        return IFX_ERROR;
+    }
+    HandleCallbacks.GetEnumOrdial = (*env)->GetMethodID(env, HandleCallbacks.HandleClass, "getEnumOrdial", "()I");
+    if (HandleCallbacks.GetEnumOrdial == NULL)
+    {
+        print_message("Cannot find handle getEnumOrdial\n");
+        return IFX_ERROR;
+    }
+    return IFX_SUCCESS;
+}
+
+/*-------------------------------------------------------------------------*//**
+    Perform the Module lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerModuleCallbacks(JNIEnv* env)
+{
+    jclass TheClass;

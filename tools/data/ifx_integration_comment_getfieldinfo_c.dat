@@ -1,0 +1,27 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_GetFieldInfo                                                */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Engine whenever it needs          */
+/*      to retrieve raw field information.                               */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hMenu                               Menu handle, if available    */
+/*      item                                Item number, if available    */
+/*      szField                             Name of field                */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pScope                              scope of field               */
+/*      pMode                               mode of field                */
+/*      pFieldType                          type of field                */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

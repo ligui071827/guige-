@@ -1,0 +1,6 @@
+/*-------------------------------------------------------------------------*//**
+    Perform the Buffer lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerBufferCallbacks(JNIEnv* env)
+{
+    jclass TheClass;

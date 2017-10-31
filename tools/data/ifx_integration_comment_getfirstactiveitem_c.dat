@@ -1,0 +1,24 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_GetFirstActiveItem                                          */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function may be called by the Engine at any time            */
+/*      on a successfully opened menu.  It must report the first item    */
+/*      that should be active.                                           */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hMenu                               Menu handle                  */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pItem                               First active item number     */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

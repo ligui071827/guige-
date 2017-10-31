@@ -1,0 +1,24 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_BufferUnsetFocus                                            */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This is called by an Integrated Module during                    */
+/*      IFXM_UnsetElementFocus to inform the module that the element     */
+/*      associated with the buffer has lost the focus.  The IL           */
+/*      will forward the request on to the relevant module.              */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hModuleId                           IL Session                   */
+/*      hBufferId                           Buffer ID                    */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

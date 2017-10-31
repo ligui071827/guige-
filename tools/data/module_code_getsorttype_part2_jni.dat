@@ -1,0 +1,12 @@
+            enumObj);
+
+    if (status == IFX_SUCCESS)
+    {
+        IFX_INT32 returnedInt = (*jniEnv)->CallIntMethod(jniEnv, enumObj, HandleCallbacks.GetEnumOrdial);
+        *pType = (IFX_SORT_TYPE) returnedInt;
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, enumObj);
+
+    return status;
+}

@@ -1,0 +1,10 @@
+            cacheBuffer->bufferObject);
+
+    (*jniEnv)->DeleteGlobalRef(jniEnv, cacheBuffer->bufferObject);
+
+    // Cleanup the buffer.
+    memset(cacheBuffer, 0, sizeof(CACHE_BUFFER));
+    IFXF_free(cacheBuffer);
+
+    return status;
+}

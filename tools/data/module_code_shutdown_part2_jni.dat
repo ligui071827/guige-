@@ -1,0 +1,15 @@
+
+    // Delete the module object.
+    (*jniEnv)->DeleteGlobalRef(jniEnv,
+            cacheModule->moduleObject);
+
+    // Delete the class references.
+    unregisterCallbacks(jniEnv);
+
+    // Cleanup the widget.
+    memset(cacheModule, 0, sizeof(CACHE_MODULE));
+    IFXF_free(cacheModule);
+
+
+    return status;
+}

@@ -1,0 +1,12 @@
+            timeObj);
+
+    if (status == IFX_SUCCESS)
+    {
+        long returnedTime = (*jniEnv)->CallLongMethod(jniEnv, timeObj, HandleCallbacks.GetTimeValue);
+        *pData = returnedTime;
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, timeObj);
+
+    return status;
+}

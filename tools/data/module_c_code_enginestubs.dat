@@ -1,0 +1,1246 @@
+#include "demo/graphics_android/inc/engine_stubs.h"
+#include "native_stubs.h"
+#include "IfxFrameworkNative.h"
+#include "androidlog.h"
+#include <dlfcn.h>
+
+
+#define ENABLE_ERROR_MESSAGES
+//#define ENABLE_INVOKE_MESSAGES
+
+#ifdef ENABLE_ERROR_MESSAGES
+	#define ERROR_MSG_PREFIX "From Native failed to invoke Engine API: "
+	#define PRINT_ERROR_MESSAGE(str) 	LOGE(ERROR_MSG_PREFIX str);
+#else
+	#define PRINT_ERROR_MESSAGE(str)
+#endif
+
+#ifdef ENABLE_INVOKE_MESSAGES
+	#define INVOKE_MSG_PREFIX "From Native invoking Engine API: "
+	#define PRINT_INVOKE_MESSAGE(str)	LOGV(INVOKE_MSG_PREFIX str);
+#else
+	#define PRINT_INVOKE_MESSAGE(str)
+#endif
+
+
+#ifdef      __cplusplus
+extern      "C" {
+#endif
+
+/* Global Variables. */
+
+static void        *engine_lib_handle;
+static const char  *engine_lib_name = "/data/data/com.nucleusgraphics.client/lib/libNucleusGraphicsEngine.so";
+static NATIVE_APIs *dl_native_APIs;
+
+/* Extern Variables. */
+
+struct LcTRomFileEntry
+{
+	const char*						name;
+	unsigned						length;
+	const unsigned char*			data;
+};
+extern const LcTRomFileEntry		g_romFileTable[];
+extern const unsigned				g_romFileCount;
+
+
+/* Functions Prototype. */
+static int Init_Native_symbols_for_Engine();
+
+IFX_RETURN_STATUS       (* dl_Init_g_romFile)(
+    const unsigned                dl_g_romFileCount,
+    const struct LcTRomFileEntry *dl_g_romFileTable);
+
+/* Integration */
+
+IFX_RETURN_STATUS       (* dl_IFXI_RequestMenuRefresh) (
+    IFX_HMODULEID       hModuleId,
+    IFX_HMENUID         hMenuId);
+
+IFX_RETURN_STATUS       (* dl_IFXI_RequestRefreshBufferedElement) (
+    IFX_HMODULEID       hModuleId,
+    IFX_HELEMENTID      hElementId);
+
+IFX_RETURN_STATUS       (* dl_IFXI_RequestTriggerKey) (
+    IFX_HMODULEID       hModuleId,
+    IFX_INT32           scancode);
+
+/* Utitliy */
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_Initialize) (
+    IFX_HUTILITY       *phUtility,
+    const IFX_WCHAR    *szLink);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_GetLinkPrefixData)(
+    IFX_HUTILITY        hUtility,
+    IFX_WCHAR          *szLinkPrefix);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_SetLinkBodyInt) (
+    IFX_HUTILITY        hUtility,
+    IFX_INT32           linkBody);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_GetLinkBodyInt) (
+    IFX_HUTILITY        hUtility,
+    IFX_INT32          *pLinkBody,
+    IFX_INT32           defaultValue);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_GetLinkStringSize) (
+    IFX_HUTILITY        hUtility,
+    IFX_INT32          *size);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_GetLinkStringData) (
+    IFX_HUTILITY        hUtility,
+    IFX_WCHAR          *szLinkString);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_Destroy) (
+    IFX_HUTILITY        hUtility);
+
+IFX_RETURN_STATUS       (* dl_IFXU_UriParser_SetParamInt) (
+    IFX_HUTILITY        hUtility,
+    const IFX_WCHAR    *szParam,
+    IFX_INT32           value);
+
+/* Engine */
+
+IFX_RETURN_STATUS       (* dl_IFXE_Async_Link_Complete)(void);
+
+IFXI_SESSION*           (* dl_IFXE_SessionFromHIL) (
+    IFX_HIL             hil);
+
+IFXI_SESSION*           (* dl_IFXE_SessionFromHModuleID) (
+    IFX_HMODULEID       hModuleId);
+
+IFX_RETURN_STATUS       (* dl_IFXE_MapInt) (
+    const IFXI_INT_MAP  pMap[],
+    IFX_INT32           sizeMap,
+    const IFX_WCHAR    *szDefValue,
+    IFXI_STRING        *pDest,
+    IFX_INT32           src);
+
+IFX_RETURN_STATUS       (* dl_IFXE_MapMenuField) (
+    LPFN_IFXM_GetMenuFieldStringSize    sizeStrFn,
+    LPFN_IFXM_GetMenuFieldStringData    getStrFn,
+    LPFN_IFXM_GetMenuFieldIntData       getIntFn,
+    LPFN_IFXM_GetMenuFieldFloatData     getFloatFn,
+    LPFN_IFXM_GetMenuFieldTimeData      getTimeFn,
+    const IFXI_STRING_MAP              *pStringMap,
+    const IFXI_INT_MAP                 *pIntMap,
+    const IFXI_FLOAT_MAP               *pFloatMap,
+    IFX_INT32                           mapSize,
+    const IFX_WCHAR                    *szDefValue,
+    IFXI_STRING                        *pDest,
+    IFX_HMODULE                         hModule,
+    IFXI_MODULE_MENU_INFO              *pMenuInfo,
+    IFX_INT32                           item);
+
+IFX_RETURN_STATUS       (* dl_IFXE_Callback) (
+    IFX_HUI             hIfx,
+    IFX_CALLBACK_CODE   nCode,
+    IFX_HELEMENT        hElement,
+    IFX_HMENU           hMenu,
+    IFX_INT32           item,
+    const void*         pInput,
+    void*               pOutput);
+
+const IFX_WCHAR*        (* dl_IFXE_StringData) (
+    const IFXI_STRING  *pStr);
+
+void                    (* dl_IFXE_StringAssignConst) (
+    IFXI_STRING        *pDest,
+    const IFX_WCHAR    *szSrc);
+
+void                    (* dl_IFXE_StringInit) (
+    IFXI_STRING        *pStr);
+
+void                    (* dl_IFXE_StringFree) (
+    IFXI_STRING        *pStr);
+
+IFX_RETURN_STATUS       (* dl_IFXE_GetMenuString) (
+    LPFN_IFXM_GetMenuPropertyStringSize     sizeStrFn,
+    LPFN_IFXM_GetMenuPropertyStringData     getStrFn,
+    IFX_HMODULE                             hModule,
+    IFX_HMENU                               hMenu,
+    IFXI_STRING                            *pDest);
+
+IFX_RETURN_STATUS       (* dl_IFXE_GetMenuItemString) (
+    LPFN_IFXM_GetMenuFieldStringSize    sizeStrFn,
+    LPFN_IFXM_GetMenuFieldStringData    getStrFn,
+    IFX_HMODULE                         hModule,
+    IFX_HMENU                           hMenu,
+    IFX_INT32                           item,
+    IFXI_STRING                        *pDest);
+
+void                    (* dl_IFXE_FreeMemoryUnsafe) (void *memory);
+
+void*                   (* dl_IFXE_AllocateMemoryUnsafe) (size_t size);
+
+IFX_WCHAR*              (* dl_IFXE_GetUriStringParam) (
+    IFX_HUTILITY        hSession,
+    const IFX_WCHAR    *szParam,
+    const IFX_WCHAR    *szDefaultValue);
+
+IFX_WCHAR*              (* dl_IFXE_GetUriBody) (
+    IFX_HUTILITY        hSession,
+    const IFX_WCHAR    *szDefaultValue);
+
+void*                   (* dl_IFXF_malloc)(int size);
+
+void                    (* dl_IFXF_free)(void *ptr);
+
+
+int                    (* dl_IFXF_Set_Engine_Configuration)(
+    void              **nativeHandle,
+    char               *input_lang,
+    int                 input_left,
+    int                 input_right,
+    int                 input_width,
+    int                 input_height,
+    char               *input_mode,
+    char               *input_pack_name);
+
+int                     (* dl_IFXF_Initialize) (
+    void                 *nativeHandle);
+
+int                     (* dl_IFXF_Event_Handler) (
+    void                 *nativeHandle,
+    int                  breakOnSwapBuffer);
+
+int                     (* dl_IFXF_Async_Link_Complete)(
+    int                 flags);
+
+int                     (* dl_IFXF_Key_Down)(
+    void *nativeHandle,
+    int                 input_key);
+
+int                     (* dl_IFXF_Key_Up)(
+    void *nativeHandle,
+    int                 input_key);
+
+int                     (* dl_IFXF_Touch_Down)(
+    void *nativeHandle,
+    int                 input_x,
+    int                 input_y);
+
+int                     (* dl_IFXF_Touch_Up)(
+    void *nativeHandle,
+    int                 input_x,
+    int                 input_y);
+
+int                     (* dl_IFXF_Touch_Move)(
+    void *nativeHandle,
+    int                 input_x,
+    int                 input_y);
+
+
+int                     (* dl_IFXF_Resume)(void* nativeHandle);
+int                     (* dl_IFXF_Resume_Direct)(void* nativeHandle);
+int                     (* dl_IFXF_Reload)(void* nativeHandle);
+
+void                    (* dl_IFXF_Set_Dimensions)(
+    int                 width,
+    int                 height,
+    int                 top,
+    int                 left);
+
+int                     (* dl_IFXF_Shutdown)(void* nativeHandle);
+
+int                     (* dl_IFXF_Cleanup)(void* nativeHandle);
+
+int                     (* dl_IFXF_Suspend)(void* nativeHandle);
+
+int                     (* dl_IFXF_Refresh_Display)(void* nativeHandle);
+
+int                     (* dl_IFXF_Get_Height)();
+
+int                     (* dl_IFXF_Get_Width)();
+
+/*
+	This function open the engine shared library.
+	It initialize the function pointers with the APIs of Engine lib used stub functions.
+	Also initialize functions pointers for Engine to call native lib symbols.
+*/
+int Load_Init_NG_Engine_lib()
+{
+	int status = 1;
+
+    LOGD("Trying to load... ");
+    LOGD(engine_lib_name);
+
+	/* Open shared library Nucleus Graphics Engine. */
+    engine_lib_handle = dlopen (engine_lib_name, RTLD_NOW);
+
+    if (!engine_lib_handle)
+    {
+		LOGE("Failed to open Nucleus Graphics Engine Library ...");
+        status = 0;
+    }
+
+	if(status)
+	{
+		/* Initializing the functions' pointer with respective Engine APIs for stub functions. */
+		*(void **)(&dl_IFXI_RequestMenuRefresh)            = dlsym(engine_lib_handle, "IFXI_RequestMenuRefresh");
+		*(void **)(&dl_IFXI_RequestRefreshBufferedElement) = dlsym(engine_lib_handle, "IFXI_RequestRefreshBufferedElement");
+		*(void **)(&dl_IFXI_RequestTriggerKey)             = dlsym(engine_lib_handle, "IFXI_RequestTriggerKey");
+		*(void **)(&dl_IFXU_UriParser_Initialize)          = dlsym(engine_lib_handle, "IFXU_UriParser_Initialize");
+		*(void **)(&dl_IFXU_UriParser_GetLinkPrefixData)   = dlsym(engine_lib_handle, "IFXU_UriParser_GetLinkPrefixData");
+		*(void **)(&dl_IFXU_UriParser_SetLinkBodyInt)      = dlsym(engine_lib_handle, "IFXU_UriParser_SetLinkBodyInt");
+		*(void **)(&dl_IFXU_UriParser_GetLinkBodyInt)      = dlsym(engine_lib_handle, "IFXU_UriParser_GetLinkBodyInt");
+		*(void **)(&dl_IFXU_UriParser_GetLinkStringSize)   = dlsym(engine_lib_handle, "IFXU_UriParser_GetLinkStringSize");
+		*(void **)(&dl_IFXU_UriParser_GetLinkStringData)   = dlsym(engine_lib_handle, "IFXU_UriParser_GetLinkStringData");
+		*(void **)(&dl_IFXU_UriParser_Destroy)             = dlsym(engine_lib_handle, "IFXU_UriParser_Destroy");
+		*(void **)(&dl_IFXU_UriParser_SetParamInt)         = dlsym(engine_lib_handle, "IFXU_UriParser_SetParamInt");
+
+		*(void **)(&dl_IFXE_Async_Link_Complete)           = dlsym(engine_lib_handle, "IFXE_Async_Link_Complete");
+		*(void **)(&dl_IFXE_SessionFromHIL)                = dlsym(engine_lib_handle, "IFXE_SessionFromHIL");
+		*(void **)(&dl_IFXE_SessionFromHModuleID)          = dlsym(engine_lib_handle, "IFXE_SessionFromHModuleID");
+		*(void **)(&dl_IFXE_MapInt)                        = dlsym(engine_lib_handle, "IFXE_MapInt");
+		*(void **)(&dl_IFXE_MapMenuField)                  = dlsym(engine_lib_handle, "IFXE_MapMenuField");
+		*(void **)(&dl_IFXE_Callback)                      = dlsym(engine_lib_handle, "IFXE_Callback");
+		*(void **)(&dl_IFXE_StringData)                    = dlsym(engine_lib_handle, "IFXE_StringData");
+		*(void **)(&dl_IFXE_StringAssignConst)             = dlsym(engine_lib_handle, "IFXE_StringAssignConst");
+		*(void **)(&dl_IFXE_StringInit)                    = dlsym(engine_lib_handle, "IFXE_StringInit");
+		*(void **)(&dl_IFXE_StringFree)                    = dlsym(engine_lib_handle, "IFXE_StringFree");
+		*(void **)(&dl_IFXE_GetMenuString)                 = dlsym(engine_lib_handle, "IFXE_GetMenuString");
+		*(void **)(&dl_IFXE_GetMenuItemString)             = dlsym(engine_lib_handle, "IFXE_GetMenuItemString");
+		*(void **)(&dl_IFXE_FreeMemoryUnsafe)              = dlsym(engine_lib_handle, "IFXE_FreeMemoryUnsafe");
+		*(void **)(&dl_IFXE_AllocateMemoryUnsafe)          = dlsym(engine_lib_handle, "IFXE_AllocateMemoryUnsafe");
+		*(void **)(&dl_IFXE_GetUriStringParam)             = dlsym(engine_lib_handle, "IFXE_GetUriStringParam");
+		*(void **)(&dl_IFXE_GetUriBody)                    = dlsym(engine_lib_handle, "IFXE_GetUriBody");
+
+		*(void **)(&dl_IFXF_malloc)                        = dlsym(engine_lib_handle, "IFXF_malloc");
+		*(void **)(&dl_IFXF_free)                          = dlsym(engine_lib_handle, "IFXF_free");
+
+		*(void **)(&dl_IFXF_Set_Engine_Configuration)      = dlsym(engine_lib_handle, "IFXF_Set_Engine_Configuration");
+		*(void **)(&dl_IFXF_Initialize)                    = dlsym(engine_lib_handle, "IFXF_Initialize");
+        *(void **)(&dl_IFXF_Event_Handler)                 = dlsym(engine_lib_handle, "IFXF_Event_Handler");
+		*(void **)(&dl_IFXF_Async_Link_Complete)           = dlsym(engine_lib_handle, "IFXF_Async_Link_Complete");
+		*(void **)(&dl_IFXF_Key_Down)                      = dlsym(engine_lib_handle, "IFXF_Key_Down");
+		*(void **)(&dl_IFXF_Key_Up)                        = dlsym(engine_lib_handle, "IFXF_Key_Up");
+		*(void **)(&dl_IFXF_Touch_Down)                    = dlsym(engine_lib_handle, "IFXF_Touch_Down");
+		*(void **)(&dl_IFXF_Touch_Up)                      = dlsym(engine_lib_handle, "IFXF_Touch_Up");
+		*(void **)(&dl_IFXF_Touch_Move)                    = dlsym(engine_lib_handle, "IFXF_Touch_Move");
+		*(void **)(&dl_IFXF_Resume)                        = dlsym(engine_lib_handle, "IFXF_Resume");
+		*(void **)(&dl_IFXF_Resume_Direct)                 = dlsym(engine_lib_handle, "IFXF_Resume_Direct");
+		*(void **)(&dl_IFXF_Reload)                        = dlsym(engine_lib_handle, "IFXF_Reload");
+		*(void **)(&dl_IFXF_Set_Dimensions)                = dlsym(engine_lib_handle, "IFXF_Set_Dimensions");
+		*(void **)(&dl_IFXF_Shutdown)                      = dlsym(engine_lib_handle, "IFXF_Shutdown");
+		*(void **)(&dl_IFXF_Cleanup )                      = dlsym(engine_lib_handle, "IFXF_Cleanup");
+		*(void **)(&dl_IFXF_Suspend)                       = dlsym(engine_lib_handle, "IFXF_Suspend");
+		*(void **)(&dl_IFXF_Refresh_Display)               = dlsym(engine_lib_handle, "IFXF_Refresh_Display");
+		*(void **)(&dl_IFXF_Get_Height)                    = dlsym(engine_lib_handle, "IFXF_Get_Height");
+		*(void **)(&dl_IFXF_Get_Width)                     = dlsym(engine_lib_handle, "IFXF_Get_Width");
+
+		status = Init_Native_symbols_for_Engine();
+	}
+
+	if(!status)
+	{
+		dlclose(engine_lib_handle);
+	}
+	return status;
+}
+
+/*
+	It close the NG Engine library handle.
+*/
+void Unload_NG_Engine_lib()
+{
+	dlclose(engine_lib_handle);
+}
+
+/*
+	It initialize the symbols/APIs for Engine.
+*/
+static int Init_Native_symbols_for_Engine()
+{
+	int status = 0;
+	dl_native_APIs = (NATIVE_APIs *) dlsym(engine_lib_handle, "native_APIs");
+
+	if(dl_native_APIs)
+	{	/* Initialize Native APIs for NG Engine. */
+
+		/* For Integration Layer. */
+		dl_native_APIs->dl_IFXI_Initialize                      = IFXI_Initialize;
+		dl_native_APIs->dl_IFXI_ShutDown                        = IFXI_ShutDown;
+		dl_native_APIs->dl_IFXI_ValidateGUID                    = IFXI_ValidateGUID;
+		dl_native_APIs->dl_IFXI_GetLinkTypeCount                = IFXI_GetLinkTypeCount;
+		dl_native_APIs->dl_IFXI_GetLinkTypeData                 = IFXI_GetLinkTypeData;
+		dl_native_APIs->dl_IFXI_GetExclusivityCount             = IFXI_GetExclusivityCount;
+		dl_native_APIs->dl_IFXI_OpenMenu                        = IFXI_OpenMenu;
+		dl_native_APIs->dl_IFXI_CloseMenu                       = IFXI_CloseMenu;
+		dl_native_APIs->dl_IFXI_GetItemCount                    = IFXI_GetItemCount;
+		dl_native_APIs->dl_IFXI_GetFirstActiveItem              = IFXI_GetFirstActiveItem;
+		dl_native_APIs->dl_IFXI_SetActiveItem                   = IFXI_SetActiveItem;
+		dl_native_APIs->dl_IFXI_GetFieldInfo                    = IFXI_GetFieldInfo;
+		dl_native_APIs->dl_IFXI_GetFieldSize                    = IFXI_GetFieldSize;
+		dl_native_APIs->dl_IFXI_GetFieldRaw                     = IFXI_GetFieldRaw;
+		dl_native_APIs->dl_IFXI_SetFieldRaw                     = IFXI_SetFieldRaw;
+		dl_native_APIs->dl_IFXI_GetFieldSizeFromRaw             = IFXI_GetFieldSizeFromRaw;
+		dl_native_APIs->dl_IFXI_ExecuteLink                     = IFXI_ExecuteLink;
+		dl_native_APIs->dl_IFXI_ExclusivityStatusChange         = IFXI_ExclusivityStatusChange;
+		dl_native_APIs->dl_IFXI_CreateElement                   = IFXI_CreateElement;
+		dl_native_APIs->dl_IFXI_DestroyElement                  = IFXI_DestroyElement;
+		dl_native_APIs->dl_IFXI_ActivateElement                 = IFXI_ActivateElement;
+		dl_native_APIs->dl_IFXI_DeactivateElement               = IFXI_DeactivateElement;
+		dl_native_APIs->dl_IFXI_SetElementFocus                 = IFXI_SetElementFocus;
+		dl_native_APIs->dl_IFXI_UnsetElementFocus               = IFXI_UnsetElementFocus;
+		dl_native_APIs->dl_IFXI_ProcessElementKeyDownEvent      = IFXI_ProcessElementKeyDownEvent;
+		dl_native_APIs->dl_IFXI_ProcessElementKeyUpEvent        = IFXI_ProcessElementKeyUpEvent;
+		dl_native_APIs->dl_IFXI_GetElementCaretPosition         = IFXI_GetElementCaretPosition;
+		dl_native_APIs->dl_IFXI_PositionElement                 = IFXI_PositionElement;
+		dl_native_APIs->dl_IFXI_ProcessElementStylusDownEvent   = IFXI_ProcessElementStylusDownEvent;
+		dl_native_APIs->dl_IFXI_ProcessElementStylusUpEvent     = IFXI_ProcessElementStylusUpEvent;
+		dl_native_APIs->dl_IFXI_ProcessElementStylusDragEvent   = IFXI_ProcessElementStylusDragEvent;
+		dl_native_APIs->dl_IFXI_ProcessElementStylusCancelEvent = IFXI_ProcessElementStylusCancelEvent;
+		dl_native_APIs->dl_IFXI_PaintElement                    = IFXI_PaintElement;
+		dl_native_APIs->dl_IFXI_ChangeElementMode               = IFXI_ChangeElementMode;
+		dl_native_APIs->dl_IFXI_HuiFromSession                  = IFXI_HuiFromSession;
+		dl_native_APIs->dl_IFXI_CacheStrFromSession             = IFXI_CacheStrFromSession;
+
+		/* For Simple Edit Module. */
+	//	dl_native_APIs->dl_IFXI_BufferCreateString              = IFXI_BufferCreateString;
+	//	dl_native_APIs->dl_IFXI_BufferSetFocus                  = IFXI_BufferSetFocus;
+	//	dl_native_APIs->dl_IFXI_BufferUnsetFocus                = IFXI_BufferUnsetFocus;
+	//	dl_native_APIs->dl_IFXI_BufferDestroy                   = IFXI_BufferDestroy;
+	//	dl_native_APIs->dl_IFXI_RequestFieldRefresh             = IFXI_RequestFieldRefresh;
+
+		/* For Porting Layer. */
+		dl_native_APIs->dl_NGI_Get_Background_Canvas_Buffer     = NGI_Get_Background_Canvas_Buffer;
+		dl_native_APIs->dl_NGI_Get_Display_Canvas_Buffer        = NGI_Get_Display_Canvas_Buffer;
+		dl_native_APIs->dl_NGI_Get_Drive_Paths                  = NGI_Get_Drive_Paths;
+		dl_native_APIs->dl_NGI_Set_Flag_for_Display             = NGI_Set_Flag_for_Display;
+		dl_native_APIs->dl_NGI_Set_Flag_for_EGL_Swap_Buffers    = NGI_Set_Flag_for_EGL_Swap_Buffers;
+
+		/* To initialize global ROM file for Engine. */
+		*(void **)(&dl_Init_g_romFile) = dlsym(engine_lib_handle, "Init_g_romFile");
+
+		 if(dl_Init_g_romFile)
+		 {
+			 status = (*dl_Init_g_romFile)(g_romFileCount, g_romFileTable);
+		 }
+	}
+
+	if(!status)
+	{
+		LOGE("Failed to Initialize Native APIs for Engine...");
+	}
+
+	return status;
+}
+
+/* Nucleus Graphics Engine APIs Stubs:
+   Define here to satisfy linker to resolve symbols in Native library
+*/
+
+/* Engine APIs */
+
+IFX_RETURN_STATUS IFXI_RequestMenuRefresh(
+        IFX_HMODULEID       hModuleId,
+        IFX_HMENUID         hMenuId)
+{
+	PRINT_INVOKE_MESSAGE("IFXI_RequestMenuRefresh");
+
+    if(dl_IFXI_RequestMenuRefresh)
+    {
+        return (*dl_IFXI_RequestMenuRefresh)(hModuleId, hMenuId);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXI_RequestMenuRefresh");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS IFXI_RequestRefreshBufferedElement(
+        IFX_HMODULEID       hModuleId,
+        IFX_HELEMENTID      hElementId)
+{
+	PRINT_INVOKE_MESSAGE("IFXI_RequestRefreshBufferedElement");
+
+    if(dl_IFXI_RequestRefreshBufferedElement)
+    {
+        return (*dl_IFXI_RequestRefreshBufferedElement)(hModuleId, hElementId);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXI_RequestRefreshBufferedElement");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS IFXI_RequestTriggerKey(
+        IFX_HMODULEID       hModuleId,
+        IFX_INT32           scancode)
+{
+	PRINT_INVOKE_MESSAGE("IFXI_RequestTriggerKey");
+
+    if(dl_IFXI_RequestTriggerKey)
+    {
+        return (*dl_IFXI_RequestTriggerKey)(hModuleId, scancode);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXI_RequestTriggerKey");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_Initialize(
+                        IFX_HUTILITY       *phUtility,
+                        const IFX_WCHAR    *szLink)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_Initialize");
+
+    if(dl_IFXU_UriParser_Initialize)
+    {
+        return (*dl_IFXU_UriParser_Initialize)(phUtility, szLink);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_Initialize");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_GetLinkPrefixData(
+                        IFX_HUTILITY        hUtility,
+                        IFX_WCHAR          *szLinkPrefix)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_GetLinkPrefixData");
+
+    if(dl_IFXU_UriParser_GetLinkPrefixData)
+    {
+        return (*dl_IFXU_UriParser_GetLinkPrefixData)(hUtility, szLinkPrefix);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_GetLinkPrefixData");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_SetLinkBodyInt(
+                        IFX_HUTILITY        hUtility,
+                        IFX_INT32           linkBody)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_SetLinkBodyInt");
+
+    if(dl_IFXU_UriParser_SetLinkBodyInt)
+    {
+        return (*dl_IFXU_UriParser_SetLinkBodyInt)(hUtility, linkBody);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_SetLinkBodyInt");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_GetLinkBodyInt(
+                        IFX_HUTILITY        hUtility,
+                        IFX_INT32          *pLinkBody,
+                        IFX_INT32           defaultValue)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_GetLinkBodyInt");
+
+    if(dl_IFXU_UriParser_GetLinkBodyInt)
+    {
+        return (*dl_IFXU_UriParser_GetLinkBodyInt)(hUtility, pLinkBody, defaultValue);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_GetLinkBodyInt");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_GetLinkStringSize(
+                        IFX_HUTILITY        hUtility,
+                        IFX_INT32          *size)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_GetLinkStringSize");
+
+    if(dl_IFXU_UriParser_GetLinkStringSize)
+    {
+        return (*dl_IFXU_UriParser_GetLinkStringSize)(hUtility, size);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_GetLinkStringSize");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_GetLinkStringData(
+                        IFX_HUTILITY        hUtility,
+                        IFX_WCHAR          *szLinkString)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_GetLinkStringData");
+
+    if(dl_IFXU_UriParser_GetLinkStringData)
+    {
+        return (*dl_IFXU_UriParser_GetLinkStringData)(hUtility, szLinkString);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_GetLinkStringData");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXU_UriParser_Destroy(
+                        IFX_HUTILITY        hUtility)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_Destroy");
+
+    if(dl_IFXU_UriParser_Destroy)
+    {
+        return (*dl_IFXU_UriParser_Destroy)(hUtility);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXU_UriParser_Destroy");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS IFXU_UriParser_SetParamInt(
+                        IFX_HUTILITY        hUtility,
+                        const IFX_WCHAR    *szParam,
+                        IFX_INT32           value)
+{
+	PRINT_INVOKE_MESSAGE("IFXU_UriParser_SetParamInt");
+
+    if(dl_IFXU_UriParser_SetParamInt)
+    {
+        return (*dl_IFXU_UriParser_SetParamInt)(hUtility, szParam, value);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("dl_IFXU_UriParser_SetParamInt");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS IFXE_Async_Link_Complete(void)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_Async_Link_Complete");
+
+    if(dl_IFXE_Async_Link_Complete)
+    {
+        return (*dl_IFXE_Async_Link_Complete)();
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_Async_Link_Complete");
+        return IFX_ERROR;
+    }
+}
+
+IFXI_SESSION* IFXE_SessionFromHIL(
+        IFX_HIL             hil)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_SessionFromHIL");
+
+    if(dl_IFXE_SessionFromHIL)
+    {
+        return (*dl_IFXE_SessionFromHIL)(hil);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_SessionFromHIL");
+        return NULL;
+    }
+}
+
+IFXI_SESSION* IFXE_SessionFromHModuleID(
+        IFX_HMODULEID       hModuleId)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_SessionFromHModuleID");
+
+    if(dl_IFXE_SessionFromHModuleID)
+    {
+        return (*dl_IFXE_SessionFromHModuleID)(hModuleId);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_SessionFromHModuleID");
+        return NULL;
+    }
+}
+
+IFX_RETURN_STATUS IFXE_MapInt(
+        const IFXI_INT_MAP		pMap[],
+        IFX_INT32              	sizeMap,
+        const IFX_WCHAR    	   *szDefValue,
+        IFXI_STRING            *pDest,
+        IFX_INT32              	src)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_MapInt");
+    if(dl_IFXE_MapInt)
+    {
+        return (*dl_IFXE_MapInt)(pMap, sizeMap, szDefValue, pDest, src);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_MapInt");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS IFXE_MapMenuField(
+	LPFN_IFXM_GetMenuFieldStringSize 	sizeStrFn,
+	LPFN_IFXM_GetMenuFieldStringData 	getStrFn,
+	LPFN_IFXM_GetMenuFieldIntData 		getIntFn,
+	LPFN_IFXM_GetMenuFieldFloatData		getFloatFn,
+	LPFN_IFXM_GetMenuFieldTimeData 		getTimeFn,
+    const IFXI_STRING_MAP        	   *pStringMap,
+    const IFXI_INT_MAP           	   *pIntMap,
+    const IFXI_FLOAT_MAP           	   *pFloatMap,
+    IFX_INT32							mapSize,
+    const IFX_WCHAR              	   *szDefValue,
+	IFXI_STRING          		       *pDest,
+    IFX_HMODULE 						hModule,
+	IFXI_MODULE_MENU_INFO              *pMenuInfo,
+	IFX_INT32							item)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_MapMenuField");
+
+    if(dl_IFXE_MapMenuField)
+    {
+        return (*dl_IFXE_MapMenuField)(sizeStrFn, getStrFn, getIntFn, getFloatFn, getTimeFn,
+                                       pStringMap, pIntMap, pFloatMap, mapSize, szDefValue,
+                                       pDest, hModule, pMenuInfo, item);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_MapInt");
+        return IFX_ERROR;
+    }
+}
+
+
+IFX_RETURN_STATUS IFXE_Callback(
+		IFX_HUI					hIfx,
+		IFX_CALLBACK_CODE		nCode,
+		IFX_HELEMENT			hElement,
+		IFX_HMENU				hMenu,
+		IFX_INT32				item,
+		const void*				pInput,
+		void*					pOutput)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_Callback");
+
+    if(dl_IFXE_Callback)
+    {
+        return (*dl_IFXE_Callback)(hIfx, nCode, hElement, hMenu, item, pInput, pOutput);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_Callback");
+        return IFX_ERROR;
+    }
+}
+
+const IFX_WCHAR* IFXE_StringData(
+        const IFXI_STRING    *pStr)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_StringData");
+
+    if(dl_IFXE_StringData)
+    {
+        return (*dl_IFXE_StringData)(pStr);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_StringData");
+        return NULL;
+    }
+}
+
+void IFXE_StringAssignConst(
+        IFXI_STRING          *pDest,
+        const IFX_WCHAR      *szSrc)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_StringAssignConst");
+
+    if(dl_IFXE_StringAssignConst)
+    {
+        (*dl_IFXE_StringAssignConst)(pDest, szSrc);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_StringAssignConst");
+	}
+}
+
+void IFXE_StringInit(
+        IFXI_STRING          *pStr)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_StringInit");
+
+    if(dl_IFXE_StringInit)
+    {
+        (*dl_IFXE_StringInit)(pStr);
+    }
+    else
+	{
+		PRINT_ERROR_MESSAGE("IFXE_StringInit");
+	}
+}
+
+void IFXE_StringFree(
+        IFXI_STRING          *pStr)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_StringFree");
+
+    if(dl_IFXE_StringFree)
+    {
+        (*dl_IFXE_StringFree)(pStr);
+    }
+    else
+	{
+		PRINT_ERROR_MESSAGE("IFXE_StringFree");
+	}
+}
+
+IFX_RETURN_STATUS IFXE_GetMenuString(
+        LPFN_IFXM_GetMenuPropertyStringSize   	sizeStrFn,
+        LPFN_IFXM_GetMenuPropertyStringData    	getStrFn,
+        IFX_HMODULE         					hModule,
+        IFX_HMENU           					hMenu,
+        IFXI_STRING          				   *pDest)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_GetMenuString");
+
+    if(dl_IFXE_GetMenuString)
+    {
+        return (*dl_IFXE_GetMenuString)(sizeStrFn, getStrFn, hModule, hMenu, pDest);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_GetMenuString");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS IFXE_GetMenuItemString(
+        LPFN_IFXM_GetMenuFieldStringSize 	sizeStrFn,
+        LPFN_IFXM_GetMenuFieldStringData 	getStrFn,
+        IFX_HMODULE         				hModule,
+        IFX_HMENU           				hMenu,
+        IFX_INT32              				item,
+        IFXI_STRING          			   *pDest)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_GetMenuItemString");
+
+    if(dl_IFXE_GetMenuItemString)
+    {
+        return (*dl_IFXE_GetMenuItemString)(sizeStrFn, getStrFn, hModule, hMenu, item, pDest);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_GetMenuItemString");
+        return IFX_ERROR;
+    }
+}
+
+void IFXE_FreeMemoryUnsafe(void* memory)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_FreeMemoryUnsafe");
+
+    if(dl_IFXE_FreeMemoryUnsafe)
+    {
+        (*dl_IFXE_FreeMemoryUnsafe)(memory);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_FreeMemoryUnsafe");
+	}
+}
+
+void* IFXE_AllocateMemoryUnsafe(size_t size)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_AllocateMemoryUnsafe");
+
+    if(dl_IFXE_AllocateMemoryUnsafe)
+    {
+        return (*dl_IFXE_AllocateMemoryUnsafe)(size);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_AllocateMemoryUnsafe");
+        return NULL;
+    }
+}
+
+IFX_WCHAR* IFXE_GetUriStringParam(
+        IFX_HUTILITY        hSession,
+        const IFX_WCHAR    *szParam,
+        const IFX_WCHAR    *szDefaultValue)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_GetUriStringParam");
+
+    if(dl_IFXE_GetUriStringParam)
+    {
+        return (*dl_IFXE_GetUriStringParam)(hSession, szParam, szDefaultValue);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_GetUriStringParam");
+        return NULL;
+    }
+}
+
+IFX_WCHAR* IFXE_GetUriBody(
+        IFX_HUTILITY        hSession,
+        const IFX_WCHAR    *szDefaultValue)
+{
+	PRINT_INVOKE_MESSAGE("IFXE_GetUriBody");
+
+    if(dl_IFXE_GetUriBody)
+    {
+        return (*dl_IFXE_GetUriBody)(hSession, szDefaultValue);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXE_GetUriBody");
+        return NULL;
+    }
+}
+
+/* Framework/Porting APIs */
+
+void *IFXF_malloc(int size)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_malloc");
+
+    if(dl_IFXF_malloc)
+    {
+        return (*dl_IFXF_malloc)(size);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_malloc");
+        return NULL;
+    }
+}
+
+void IFXF_free(void *ptr)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_free");
+
+    if(dl_IFXF_free)
+    {
+        (*dl_IFXF_free)(ptr);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_free");
+    }
+}
+
+
+IFX_RETURN_STATUS IFXF_Set_Engine_Configuration(JNIEnv *env, void **nativeHandle, jstring input_lang, jint input_left, jint input_right, jint input_width, jint input_height, jstring input_mode, jstring input_pack_name)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Set_Engine_Configuration");
+
+    if(dl_IFXF_Set_Engine_Configuration)
+    {
+		const jchar *temp_input_lang_ptr, *temp_input_mode_ptr, *temp_input_pack_name_ptr;
+		jint  temp_input_lang_size, temp_input_mode_size, temp_input_pack_name_size;
+		char temp_input_lang[IFX_MAX_CONFIG_STRING_LENGTH] = {0};
+		char temp_input_mode[IFX_MAX_CONFIG_STRING_LENGTH] = {0};
+		char temp_input_pack[IFX_MAX_CONFIG_STRING_LENGTH] = {0};
+		int     i;
+
+		/* Copy the Language String. */
+		temp_input_lang_ptr = env->GetStringChars(input_lang, NULL);
+		if (temp_input_lang_ptr != NULL)
+		{
+			temp_input_lang_size = env->GetStringLength(input_lang);
+
+			for (i = 0; i <= temp_input_lang_size; i++)
+			{
+				temp_input_lang[i] = (char)temp_input_lang_ptr[i];
+			}
+
+		}
+
+		/* Copy the Display Mode String. */
+		temp_input_mode_ptr = env->GetStringChars(input_mode, NULL);
+		if (temp_input_mode_ptr != NULL)
+		{
+			temp_input_mode_size = env->GetStringLength(input_mode);
+
+			for (i = 0; i <= temp_input_mode_size; i++)
+			{
+				temp_input_mode[i] = (char)temp_input_mode_ptr[i];
+			}
+		}
+
+		/* Copy the Theme String. */
+		temp_input_pack_name_ptr = env->GetStringChars(input_pack_name, NULL);
+		if (temp_input_pack_name_ptr != NULL)
+		{
+			temp_input_pack_name_size = env->GetStringLength(input_pack_name);
+
+			for (i = 0; i < temp_input_pack_name_size; i++)
+			{
+				temp_input_pack[i] = (char)temp_input_pack_name_ptr[i];
+			}
+		}
+
+        return (*dl_IFXF_Set_Engine_Configuration)(nativeHandle, temp_input_lang, input_left, input_right, input_width, input_height, temp_input_mode, temp_input_pack);
+	}
+	else
+	{
+		PRINT_ERROR_MESSAGE("IFXF_Set_Engine_Configuration");
+        return IFX_ERROR;
+	}
+}
+
+IFX_RETURN_STATUS IFXF_Initialize(void* nativeHandle)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Initialize");
+
+    if(dl_IFXF_Initialize)
+    {
+        return (*dl_IFXF_Initialize)(nativeHandle);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Initialize");
+        return IFX_ERROR;
+    }
+}
+
+int IFXF_Event_Handler(void* nativeHandle, int breakOnSwapBuffer)
+{
+    PRINT_INVOKE_MESSAGE("IFXF_Event_Handler");
+
+    if(dl_IFXF_Initialize)
+    {
+        return (*dl_IFXF_Event_Handler)(nativeHandle, breakOnSwapBuffer);
+    }
+    else
+    {
+        PRINT_ERROR_MESSAGE("IFXF_Event_Handler");
+        return IFX_ERROR;
+    }
+}
+
+jint IFXF_Async_Link_Complete(JNIEnv *env, jobject thiz, jint flags)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Async_Link_Complete");
+
+    if(dl_IFXF_Async_Link_Complete)
+    {
+        return (*dl_IFXF_Async_Link_Complete)(flags);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Async_Link_Complete");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Key_Down(void *nativeHandle, int input_key)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Key_Down");
+
+    if(dl_IFXF_Key_Down)
+    {
+        return (*dl_IFXF_Key_Down)(nativeHandle, input_key);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Key_Down");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Key_Up(void *nativeHandle, int input_key)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Key_Up");
+
+    if(dl_IFXF_Key_Up)
+    {
+        return (*dl_IFXF_Key_Up)(nativeHandle, input_key);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Key_Up");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Touch_Down(void *nativeHandle, int input_x, int input_y)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Touch_Down");
+
+    if(dl_IFXF_Touch_Down)
+    {
+        return (*dl_IFXF_Touch_Down)(nativeHandle, input_x, input_y);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Touch_Down");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Touch_Up(void *nativeHandle, int input_x, int input_y)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Touch_Up");
+
+    if(dl_IFXF_Touch_Up)
+    {
+        return (*dl_IFXF_Touch_Up)(nativeHandle, input_x, input_y);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Touch_Up");
+        return IFX_ERROR;
+    }
+}
+
+
+IFX_RETURN_STATUS   IFXF_Touch_Move(void *nativeHandle, int input_x, int input_y)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Touch_Move");
+
+    if(dl_IFXF_Touch_Move)
+    {
+        return (*dl_IFXF_Touch_Move)(nativeHandle, input_x, input_y);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Touch_Move");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Resume(void* nativeHandle)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Resume");
+
+    if(dl_IFXF_Resume)
+    {
+        return (*dl_IFXF_Resume)(nativeHandle);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Resume");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Resume_Direct(void* nativeHandle)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Resume_Direct");
+
+    if(dl_IFXF_Resume)
+    {
+        return (*dl_IFXF_Resume_Direct)(nativeHandle);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Resume_Direct");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Suspend(void* nativeHandle)
+{
+    PRINT_INVOKE_MESSAGE("IFXF_Suspend");
+
+    if(dl_IFXF_Suspend)
+    {
+        return (*dl_IFXF_Suspend)(nativeHandle);
+    }
+    else
+    {
+        PRINT_ERROR_MESSAGE("IFXF_Suspend");
+        return IFX_ERROR;
+    }
+}
+IFX_RETURN_STATUS   IFXF_Refresh_Display(void* nativeHandle)
+{
+    PRINT_INVOKE_MESSAGE("IFXF_Refresh_Display");
+
+    if(dl_IFXF_Suspend)
+    {
+        return (*dl_IFXF_Refresh_Display)(nativeHandle);
+    }
+    else
+    {
+        PRINT_ERROR_MESSAGE("IFXF_Refresh_Display");
+        return IFX_ERROR;
+    }
+}
+
+IFX_RETURN_STATUS   IFXF_Reload(void* nativeHandle)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Reload");
+
+    if(dl_IFXF_Reload)
+    {
+        return (*dl_IFXF_Reload)(nativeHandle);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Reload");
+        return IFX_ERROR;
+    }
+}
+
+void IFXF_Set_Dimensions(JNIEnv *env, jobject thiz, jint width, jint height, jint top, jint left)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Set_Dimensions");
+
+    if(dl_IFXF_Set_Dimensions)
+    {
+        (*dl_IFXF_Set_Dimensions)(width, height, top, left);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Set_Dimensions");
+	}
+}
+
+IFX_RETURN_STATUS IFXF_Shutdown(void* nativeHandle)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Shutdown");
+
+    if(dl_IFXF_Shutdown)
+    {
+        return (*dl_IFXF_Shutdown)(nativeHandle);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Shutdown");
+        return IFX_ERROR;
+    }
+}
+
+
+IFX_RETURN_STATUS IFXF_Cleanup(void* nativeHandle)
+{
+	PRINT_INVOKE_MESSAGE("IFXF_Cleanup");
+
+    if(dl_IFXF_Cleanup)
+    {
+        return (*dl_IFXF_Cleanup)(nativeHandle);
+    }
+    else
+    {
+		PRINT_ERROR_MESSAGE("IFXF_Cleanup");
+        return IFX_ERROR;
+    }
+}
+
+#ifdef      __cplusplus
+}
+#endif      /* __cplusplus */

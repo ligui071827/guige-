@@ -1,0 +1,39 @@
+            item,
+            byteBufferObj,
+            maxLength);
+
+    jboolean bufferFound = (*jniEnv)->CallBooleanMethod(jniEnv, byteBufferObj, HandleCallbacks.IsByteBuffer);
+    if ((bufferObj != NULL) && (bufferFound == JNI_TRUE))
+    {
+        jobject byteBuffer = (*jniEnv)->CallObjectMethod(jniEnv, byteBufferObj, HandleCallbacks.GetByteBuffer);
+        if (byteBuffer != NULL)
+        {
+            char* returnedCharStr = (char*)((*jniEnv)->GetDirectBufferAddress(jniEnv, byteBuffer));
+            if (returnedCharStr != NULL)
+            {
+                *pBuffer = (IFX_WCHAR*)returnedCharStr;
+
+                cacheBuffer->byteBufferObject = (*jniEnv)->NewGlobalRef(jniEnv, byteBuffer);
+                cacheBuffer->bufferObject = (*jniEnv)->NewGlobalRef(jniEnv, bufferObj);
+				cacheBuffer->bufferMenu = hMenu;
+                *phBuffer = (IFX_HBUFFER)cacheBuffer;
+
+                status = IFX_SUCCESS;
+            }
+
+            (*jniEnv)->DeleteLocalRef(jniEnv, byteBuffer);
+        }
+
+        (*jniEnv)->DeleteLocalRef(jniEnv, bufferObj);
+    }
+
+    if (status != IFX_SUCCESS)
+    {
+        memset(cacheBuffer, 0, sizeof(CACHE_BUFFER));
+        IFXF_free(cacheBuffer);
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, byteBufferObj);
+
+    return status;
+}

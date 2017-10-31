@@ -1,0 +1,23 @@
+            item,
+            strObj);
+
+    if (status == IFX_SUCCESS)
+    {
+        jstring returnedString = (jstring)((*jniEnv)->CallObjectMethod(jniEnv, strObj, HandleCallbacks.GetStringValue));
+        if (returnedString != NULL)
+        {
+            *pSize = (*jniEnv)->GetStringLength(jniEnv, returnedString) + (2 * sizeof(IFX_WCHAR));
+            *phRequest = ((*jniEnv)->NewGlobalRef(jniEnv, returnedString));
+
+            (*jniEnv)->DeleteLocalRef(jniEnv, returnedString);
+        }
+        else
+        {
+            status = IFX_ERROR;
+        }
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, strObj);
+
+    return status;
+}

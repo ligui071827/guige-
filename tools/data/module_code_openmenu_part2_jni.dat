@@ -1,0 +1,2 @@
+    jobject menuObj = (*jniEnv)->CallObjectMethod(jniEnv,
+            cacheModule->moduleObject,

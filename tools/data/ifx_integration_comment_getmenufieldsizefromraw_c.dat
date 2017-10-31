@@ -1,0 +1,25 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IL_GetMenuFieldSizeFromRaw                                       */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Attempts to find a given menu field, and if found, stores the    */
+/*      result of raw value mapping in the IL Session's cached string.   */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      ils                                 IL Session                   */
+/*      menuInfo                            Associated menu              */
+/*      item                                Item number                  */
+/*      szField                             Name of field                */
+/*      value                               Raw value of field           */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

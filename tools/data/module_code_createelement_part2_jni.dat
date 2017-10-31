@@ -1,0 +1,13 @@
+    cacheElement->elementId = hElementId;
+
+    // Construct a new Element Property.
+    jobject propertyObj = (*jniEnv)->NewObject(jniEnv, PropertyCallbacks.PropertyClass,
+            PropertyCallbacks.Constructor,
+            pProperty->mode,
+            pProperty->requiredBufferWidth,
+            pProperty->requiredBufferHeight,
+            pProperty->translucency,
+            pProperty->hasPreMultipliedAlpha);
+
+    if (propertyObj == NULL)
+        return IFX_ERROR;

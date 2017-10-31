@@ -1,0 +1,6 @@
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, enumObj);
+	
+    return status;
+}

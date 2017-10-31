@@ -1,0 +1,19 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ExclSessionFromSession                                      */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Returns the Exclusivity session related to a given IFXI_SESSION  */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      pSession                            IL Session                   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      Exclusivity session, or NULL if error                            */
+/*                                                                       */
+/*************************************************************************/

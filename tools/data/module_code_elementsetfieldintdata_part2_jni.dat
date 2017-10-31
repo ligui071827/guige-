@@ -1,0 +1,8 @@
+            strField,
+            value,
+			final);
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, strField);
+
+    return status;
+}

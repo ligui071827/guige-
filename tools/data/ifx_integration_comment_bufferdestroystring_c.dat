@@ -1,0 +1,22 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_BufferDestroy                                               */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This is called by an Integrated Module during IFXM_DestroyElement*/
+/*      to free up the buffer allocated by IFXM_BufferCreateString.      */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hBufferId                           Buffer ID                    */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

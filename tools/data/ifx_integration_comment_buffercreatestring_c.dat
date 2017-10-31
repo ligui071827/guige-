@@ -1,0 +1,34 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_BufferCreateString                                          */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This is called by an Integrated Module during IFXM_CreateElement */
+/*      to request a buffer from another module to allow it to edit      */
+/*      field data owned by that other module.                           */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hMenuId                             Menu ID                      */
+/*      item                                Item number in menu          */
+/*      szField                             Field name                   */
+/*      maxLength                           Maximum number of characters */
+/*                                          that the buffer can contain, */
+/*                                          excluding the NULL terminator*/
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      phBufferId                          Buffer ID that should be used*/
+/*                                          whenever the element calls   */
+/*                                          back into the IL regarding   */
+/*                                          this buffer.                 */
+/*      pBuffer                             Returns a pointer to a buffer*/
+/*                                          that the element can edit.   */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

@@ -1,0 +1,28 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_SetFieldRaw                                                 */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Engine whenever it needs          */
+/*      to set field data value in raw form.                             */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      type                                Type of data being queried   */
+/*      hElement                            Element handle, if available */
+/*      hMenu                               Menu handle, if available    */
+/*      item                                Item number, if available    */
+/*      szField                             Name of field                */
+/*      value                               New value of field           */
+/*      final                               whether the value is final   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

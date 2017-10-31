@@ -1,0 +1,20 @@
+                    newMode,
+                    cacheElement->renderContextObject);
+
+        jobject frameBuffer = (*jniEnv)->GetObjectField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.BufferedContextPBuffer);
+
+        if (frameBuffer != NULL) {
+            renderContextPtr->pBuffer = (*jniEnv)->GetDirectBufferAddress(jniEnv, frameBuffer);
+        }
+
+        /* Save for use in Paint call. */
+        cacheElement->currentMode = newMode;
+        cacheElement->ifxRenderContext.savedElementBufferedContext = renderContextPtr;		
+    }
+    else
+    {
+        status = IFX_ERROR;
+    }
+
+    return status;
+}

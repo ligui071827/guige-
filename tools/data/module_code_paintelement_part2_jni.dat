@@ -1,0 +1,23 @@
+                cacheElement->renderContextObject);
+                
+        if (status == IFX_SUCCESS)
+        {
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->texture = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextTexture);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->tex_width = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextTex_Width);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->tex_height = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextTex_Height);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->top = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextTop);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->left = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextLeft);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->height = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextHeight);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->width = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextWidth);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->textureTarget = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextTextureTarget);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->secondaryTextures[0] = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextSecondaryTexture0);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->secondaryTextures[1] = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextSecondaryTexture1);
+            cacheElement->ifxRenderContext.savedOpenGLRenderContext->secondaryTextures[2] = (*jniEnv)->GetIntField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.OpenGLContextSecondaryTexture2);
+        }
+
+    }
+    else if (cacheElement->currentMode == IFX_MODE_ELEMENT_BUFFERED)
+    {
+
+        status = (*jniEnv)->CallIntMethod(jniEnv,
+                cacheElement->elementObject,

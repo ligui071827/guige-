@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<uiEffect xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" icon="" name="AlphaLightEffect1" usage="AlphaLight01" xsi:noNamespaceSchemaLocation="inflexion_2.5.0/effectDefinition.xsd">
+
+  <vertexShader name="AlphaLightVShader">
+    <shaderSource file="Normal/normal_texlight_1.vert"/>
+  </vertexShader>
+
+  <fragmentShader name="AlphaLightFShader">
+    <shaderSource file="Normal/normal_alphalight.frag"/>
+  </fragmentShader>
+
+  <uniforms>
+    <uniform description="Model view transformation matrix of order 4x4" engineMapping="IFX_MODELVIEW" name="u_ModelViewMatrix" type="mat4"/>
+    <uniform description="Projection transformation matrix of order 4x4" engineMapping="IFX_PROJECTION" name="u_ProjectionMatrix" type="mat4"/>
+    <uniform description="Normal transformation matrix of order 3x3" engineMapping="IFX_NORMAL" name="u_NormalMatrix" type="mat3"/>
+
+    <uniform description="Material Ambient Color" engineMapping="IFX_MATERIAL_AMBIENT" name="u_MaterialAmbientColor" type="vec4"/>
+    <uniform description="Material Diffuse Color" engineMapping="IFX_MATERIAL_DIFFUSE" name="u_MaterialDiffuseColor" type="vec4"/>
+    <uniform description="Material Emissive Color" engineMapping="IFX_MATERIAL_EMISSIVE" name="u_MaterialEmissiveColor" type="vec4"/>
+    <uniform description="Material Scene Color" engineMapping="IFX_GLOBAL_AMBIENT" name="u_MaterialSceneColor" type="vec4"/>
+
+    <uniform description="Light 0 Ambient Color" engineMapping="IFX_AMBIENT_LIGHT_0" name="u_LightAmbientColor_0" type="vec4"/>
+    <uniform description="Light 0 Position" engineMapping="IFX_LIGHT_POSITION_0" name="u_LightPosition_0" type="vec4"/>
+    <uniform description="Light 0 Diffuse Color" engineMapping="IFX_DIFFUSE_LIGHT_0" name="u_LightDiffuseColor_0" type="vec4"/>
+
+    <uniform description="Base Color Texture" engineMapping="IFX_PRIMARY_TEXTURE" name="s_Texture" type="sampler2D"/>
+  </uniforms>
+
+  <attributes>
+    <attribute description="Vertex coordinates" engineMapping="IFX_VERTEX_COORDS" name="a_VertCoord" type="vec3"/>
+    <attribute description="Normal coordinates" engineMapping="IFX_NORMAL_COORDS" name="a_NormalCoord" type="vec3"/>
+    <attribute description="Texture co-ordinates" engineMapping="IFX_TEXTURE_COORDS" name="a_TexCoord" type="vec2"/>
+  </attributes>
+
+</uiEffect>

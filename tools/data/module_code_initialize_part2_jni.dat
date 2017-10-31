@@ -1,0 +1,9 @@
+            if (moduleObj == NULL)
+            {
+                print_message("The module has not been loaded\n");
+                return IFX_ERROR;
+            }
+
+            // Initialize the module.
+            status = (*jniEnv)->CallIntMethod(jniEnv,
+                    moduleObj,

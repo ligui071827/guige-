@@ -1,0 +1,8 @@
+    if (menuObj != NULL)
+    {
+        *phMenu = (IFX_HMENU) ((*jniEnv)->NewGlobalRef(jniEnv, menuObj));
+
+        (*jniEnv)->DeleteLocalRef(jniEnv, menuObj);
+
+        status = IFX_SUCCESS;
+    }

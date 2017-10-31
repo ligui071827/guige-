@@ -1,0 +1,2 @@
+    status = (*jniEnv)->CallIntMethod(jniEnv,
+            cacheModule->moduleObject,

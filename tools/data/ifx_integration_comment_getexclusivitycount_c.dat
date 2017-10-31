@@ -1,0 +1,22 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_GetExclusivityCount                                         */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Used to query how many different Exclusivity handles could be in */
+/*      use simultaneously.                                              */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pCount                              The count of exclusivity     */
+/*                                          handles that the IL will use */
+/*      IFX_SUCCESS                         Always                       */
+/*                                                                       */
+/*************************************************************************/

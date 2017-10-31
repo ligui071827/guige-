@@ -1,0 +1,10 @@
+            cacheElement->elementObject);
+
+    (*jniEnv)->DeleteGlobalRef(jniEnv, cacheElement->elementObject);
+
+    // Cleanup the element.
+    memset(cacheElement, 0, sizeof(CACHE_ELEMENT));
+    IFXF_free(cacheElement);
+
+    return status;
+}

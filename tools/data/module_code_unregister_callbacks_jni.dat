@@ -1,0 +1,65 @@
+/*-------------------------------------------------------------------------*//**
+    Perform the function lookups now to speed up access later.
+*/
+static IFX_RETURN_STATUS registerCallbacks(JNIEnv* env)
+{
+    /*
+        Store the callback methods.
+    */
+    if (IFX_ERROR == registerModuleCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerDisplayCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerPropertyCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerPositionCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerHandleCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerMenuCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerElementCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+    if (IFX_ERROR == registerBufferCallbacks(env))
+    {
+        return IFX_ERROR;
+    }
+
+    return IFX_SUCCESS;
+}
+
+/*-------------------------------------------------------------------------*//**
+    Delete memory allocated at the start.
+*/
+static void unregisterCallbacks(JNIEnv* env)
+{
+    if (IfxDisplayCallbacks.IfxDisplayClass)
+    {
+        (*env)->DeleteGlobalRef(env, IfxDisplayCallbacks.IfxDisplayClass);
+    }
+    if (PropertyCallbacks.PropertyClass)
+    {
+        (*env)->DeleteGlobalRef(env, PropertyCallbacks.PropertyClass);
+    }
+    if (PositionCallbacks.PositionClass)
+    {
+        (*env)->DeleteGlobalRef(env, PositionCallbacks.PositionClass);
+    }
+    if (HandleCallbacks.HandleClass)
+    {
+        (*env)->DeleteGlobalRef(env, HandleCallbacks.HandleClass);
+    }

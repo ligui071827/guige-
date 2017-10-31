@@ -1,0 +1,21 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ReleaseExclusivity                                          */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Catch-all Module to release       */
+/*      exclusivity.                                                     */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hModuleID                           Module ID                    */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

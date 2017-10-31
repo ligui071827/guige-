@@ -1,0 +1,24 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_RequestFieldRefresh                                         */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      Notifies the UI Engine that field data has changed and the       */
+/*		display should be refreshed.                                     */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hModuleId                           Module ID                    */
+/*      hMenuId								Menu handle					 */
+/*		item								Item number					 */
+/*		szField								Name of field				 */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

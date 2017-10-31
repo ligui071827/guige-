@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<uiEffect xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" icon="" name="BGEffect" usage="Background" xsi:noNamespaceSchemaLocation="inflexion_2.5.0/effectDefinition.xsd">
+
+  <vertexShader name="TextureVShader">
+    <shaderSource file="Normal/normal_background.vert"/>
+  </vertexShader>
+
+  <fragmentShader name="TextureFShader">
+    <shaderSource file="Normal/normal_background.frag"/>
+  </fragmentShader>
+
+  <uniforms>
+    <uniform description="Model view transformation matrix of order 4x4" engineMapping="IFX_MODELVIEW" name="u_ModelViewMatrix" type="mat4"/>
+    <uniform description="Projection transformation matrix of order 4x4" engineMapping="IFX_PROJECTION" name="u_ProjectionMatrix" type="mat4"/>
+
+    <uniform description="Base Color Texture" engineMapping="IFX_PRIMARY_TEXTURE" name="s_Texture" type="sampler2D"/>
+  </uniforms>
+
+  <attributes>
+    <attribute description="Vertex coordinates" engineMapping="IFX_VERTEX_COORDS" name="a_VertCoord" type="vec3"/>
+    <attribute description="Texture co-ordinates" engineMapping="IFX_TEXTURE_COORDS" name="a_TexCoord" type="vec2"/>
+  </attributes>
+
+</uiEffect>

@@ -1,0 +1,7 @@
+                positionObj);
+    }
+
+	(*jniEnv)->DeleteLocalRef(jniEnv, positionObj);
+
+    return status;
+}

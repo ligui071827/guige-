@@ -1,0 +1,39 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_CreateElement                                               */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called to create an element of type indicated   */
+/*      by szLinkType parameter, which must have been registered as      */
+/*      IFX_MODE_ELEMENT or IFX_MODE_EVENT_HANDLER.                      */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      phElement                           Pointer to be filled in with */
+/*                                          the handle of the object     */
+/*                                          instance                     */
+/*      hMenu                               Handle of the menu for which */
+/*                                          data is being requested      */
+/*      item                                Index of the menu item the   */
+/*                                          element is associated with.  */
+/*                                          -1 is passed in when         */
+/*                                          associated with a furniture  */
+/*                                          element.                     */
+/*      szLinkType                          The link URI                 */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pProperty                           To be filled in by the       */
+/*                                          module indicating which      */
+/*                                          modes the module supports    */
+/*                                          for this type of plugin      */
+/*                                          element and other            */
+/*                                          configuration details        */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

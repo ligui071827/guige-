@@ -1,0 +1,25 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ProcessElementStylusDownEvent                               */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called when a stylus down event is received by  */
+/*      the UI Engine on a graphical plug-in element.                    */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hElement                            Element handle               */
+/*      x                                   X-coordinate of stylus       */
+/*      y                                   Y-coordinate of stylus       */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pConsumed                           Whether event was consumed   */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

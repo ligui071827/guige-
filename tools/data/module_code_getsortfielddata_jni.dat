@@ -1,0 +1,31 @@
+{
+    IFX_RETURN_STATUS status = IFX_ERROR;
+
+    if (hModule == NULL)
+    {
+        return IFX_ERROR;
+    }
+
+    JNIEnv* jniEnv;
+    if (0 != (*global_ptr_JVM)->AttachCurrentThreadAsDaemon(global_ptr_JVM, &jniEnv, NULL))
+        return IFX_ERROR;
+
+    CACHE_MODULE* cacheModule = (CACHE_MODULE*)hModule;
+
+    if (hRequest != NULL)
+    {
+        jstring returnedString = (jstring)hRequest;
+        const jchar* stringData = (*jniEnv)->GetStringChars(jniEnv, returnedString, NULL);
+
+        int size = (*jniEnv)->GetStringLength(jniEnv, returnedString);
+        lc_wcsncpy(szData, stringData, size);
+        szData[size] = 0; /* Null terminated. */
+
+        (*jniEnv)->ReleaseStringChars(jniEnv, returnedString, stringData);
+        (*jniEnv)->DeleteGlobalRef(jniEnv, returnedString);
+
+        status = IFX_SUCCESS;
+    }
+
+    return status;
+}

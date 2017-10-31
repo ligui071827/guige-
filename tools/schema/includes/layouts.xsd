@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" ecore:nsPrefix="Layouts">
+	<xs:include schemaLocation="common.xsd"/>
+	<xs:include schemaLocation="uid.xsd"/>
+	<xs:complexType name="layoutsType" ecore:name="LayoutsContainer">
+		<xs:sequence>
+			<xs:element name="layout" maxOccurs="unbounded" ecore:name="layouts">
+				<xs:annotation>
+					<xs:documentation>Each layout specifies the placement (position and appearance) of everything on screen, plus the actions that will be taken on user action.  Each layout is associated with a condition, and the layout will become active if the condition becomes 'true'.  If more than one layout is 'active' at once, the first 'active' layout found in this list will be used.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType ecore:name="Layout">
+					<xs:sequence>
+						<xs:element name="curves" minOccurs="0" ecore:name="curvePathsContainer">
+							<xs:annotation>
+								<xs:documentation>Defines the curves used to smooth scrolling. (Applies only to a menu component)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType ecore:name="CurvePathsContainer">
+								<xs:sequence>
+									<xs:element name="curve" maxOccurs="unbounded" ecore:name="curvePaths">
+										<xs:annotation>
+											<xs:documentation>Defines an individual curve as a list of keyframes</xs:documentation>
+										</xs:annotation>
+										<xs:complexType ecore:name="CurvePath">
+											<xs:complexContent>
+												<xs:extension base="curveKeyframeList">
+													<xs:attribute name="fromSlot" type="xs:unsignedInt" use="required">
+														<xs:annotation>
+															<xs:documentation>Specifies the slot the curve begins at</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="toSlot" type="xs:unsignedInt" use="required">
+														<xs:annotation>
+															<xs:documentation>Specifies the slot the curve ends at</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="class" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Specifies the class to apply the curve to.  If omitted, the curve is applied to the slot</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="primaryLight" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Configures the primary light  source that lights the entire scene.  Only interactive layouts should specify this. (Applies only to a page template)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType ecore:name="PrimaryLight">
+								<xs:all>
+									<xs:element name="orientation" type="orientationType" minOccurs="0" ecore:name="LightOrientation">
+										<xs:annotation>
+											<xs:documentation>Specifies the orientation of parallel rays of light passing through the scene.  The base orientation is rays passing down the z axis into the screen.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:all>
+								<xs:attribute name="color" type="xs:string" use="optional" default="#FFFFFF">
+									<xs:annotation>
+										<xs:documentation>Sets the color of the light.  Defaults to white (#FFFFFF).  The color value is token replaced once when the template is loaded. </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="color2" type="xs:string" use="optional" default="#808080">
+									<xs:annotation>
+										<xs:documentation>Sets the lights ambient color, defaulting to #808080.  The color value is token replaced once when the template is loaded. </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="outerGroup" type="placementAggType" minOccurs="0" ecore:name="pageLayout">
+							<xs:annotation>
+								<xs:documentation>The outermost group is an implicit group for pages and components, and effectively contains (and thus affects the placements of) all furniture elements and groups within that page or component. </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="menu" type="placementAggType" minOccurs="0" ecore:name="menuLayout">
+							<xs:annotation>
+								<xs:documentation>The menu group is an implicit group for menu components that effectively contains (and thus affects the placements of) all menu item elements, plus any furniture elements or groups attached to the 'menu' group by the 'parent' attribute. (Applies only to a menu component)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="furniture" minOccurs="0" ecore:name="furnitureLayout">
+							<xs:annotation>
+								<xs:documentation>Each furniture class can appear once on the screen, although whether one does so or not depends on the active layout.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType ecore:name="FurnitureLayout">
+								<xs:group ref="elementList" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>A list of graphical elements, groups and 'hide' instructions</xs:documentation>
+									</xs:annotation>
+								</xs:group>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="items" minOccurs="0" ecore:name="itemLayouts">
+							<xs:annotation>
+								<xs:documentation>Each item class appears once on screen for every visible slot. There may be more menu items than visible slots (in which case not all items will be on screen at once), or fewer menu items than slots (in which case some slots will be empty).  (Applies only to a menu component)</xs:documentation>
+							</xs:annotation>
+							<xs:complexType ecore:name="ItemsLayouts">
+								<xs:sequence>
+									<xs:element name="defaults" type="itemType" minOccurs="0" ecore:name="defaultLayout">
+										<xs:annotation>
+											<xs:documentation>Specifies default placements for menu items and slots</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="item" minOccurs="0" maxOccurs="unbounded" ecore:name="itemLayouts">
+										<xs:annotation>
+											<xs:documentation>Specifies slot-specific placements placements for menu items and slots</xs:documentation>
+										</xs:annotation>
+										<xs:complexType ecore:name="ItemLayout">
+											<xs:complexContent>
+												<xs:extension base="itemType">
+													<xs:attribute name="slot" type="xs:unsignedInt" use="required">
+														<xs:annotation>
+															<xs:documentation>The slot number to which these placement settings apply</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="eventHandler" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>This is a list of events that the UI may respond to when the layout is active.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType ecore:name="LayoutEventHandler">
+								<xs:sequence>
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="onTap" ecore:name="tapEvents">
+											<xs:annotation>
+												<xs:documentation>Handles pointer events (stylus taps or mouse clicks).</xs:documentation>
+											</xs:annotation>
+											<xs:complexType ecore:name="TapEvent">
+												<xs:complexContent>
+													<xs:extension base="eventType">
+														<xs:attribute name="slot" type="xs:unsignedInt">
+															<xs:annotation>
+																<xs:documentation>When configuring actions for menu items, use this attribute to indicate the slot to which the action applies (menu components only).</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+														<xs:attribute name="class" type="xs:string">
+															<xs:annotation>
+																<xs:documentation>When configuring actions for specific classes (e.g. titles and panels), use this attribute to indicate the class to which the action applies</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="onPress" ecore:name="pressEvents">
+											<xs:annotation>
+												<xs:documentation>Handles key presses</xs:documentation>
+											</xs:annotation>
+											<xs:complexType ecore:name="PressEvent">
+												<xs:complexContent>
+													<xs:extension base="eventType">
+														<xs:attribute name="key" type="xs:string" use="required">
+															<xs:annotation>
+																<xs:documentation>The key that should trigger the action.  All digits and letters can be specified, together with the special values "select", "back", "up", "down", "left", "right", "#" and "*".  You may also specify platform-dependent key scan codes using the format "scan_N" (where N is the decimal numeric scan code).  If "any" is used as the key, this is considered a 'catch-all' trigger and will fire only if a more specialised trigger is not available for the key press.</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="onSignal" ecore:name="signalEvents">
+											<xs:annotation>
+												<xs:documentation>Handle signal events emitted by components on this template</xs:documentation>
+											</xs:annotation>
+											<xs:complexType ecore:name="SignalEvent">
+												<xs:complexContent>
+													<xs:extension base="eventType">
+														<xs:attribute name="slot" type="xs:unsignedInt">
+															<xs:annotation>
+																<xs:documentation>When configuring actions for menu items, use this attribute to indicate the slot to which the action applies (menu components only).</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+														<xs:attribute name="class" type="xs:string">
+															<xs:annotation>
+																<xs:documentation>The name of the class instance that has generated the signal</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="uid-design" type="designType" minOccurs="0" ecore:name="design"/>
+					</xs:sequence>
+					<xs:attribute name="name" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>Specifies a unique name for the layout so that it can be inherited.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="inherits" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>The optional "inherits" attribute enables one layout to inherit the design of another. This is useful if you have similar layouts that differ only slightly, because you need only specify the differences within the derived layout.  Note that the 'condition' and 'eventHandler' for the parent layout are NOT inherited - only the placement information.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="condition" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>The optional "condition" attribute is a logical expression which has to be true for the layout to be displayed. If the condition is absent, the layout is shown. </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="orientationType" ecore:name="Orientation">
+		<xs:annotation>
+			<xs:documentation>Enter azimuth, elevation and roll values in the range 0 to 359. Note that this feature is available only if 3D is supported on the target platform.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="azimuth" type="xs:float" use="optional"/>
+		<xs:attribute name="elevation" type="xs:float" use="optional"/>
+		<xs:attribute name="roll" type="xs:float" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="placementElemType" ecore:name="PlacementElement">
+		<xs:all>
+			<xs:element name="location" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the location. Furniture and detail element locations are specified relative to their parent (by default, the page), menu item element locations are specified relative to the menu or (if present) the slot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="orientation" type="orientationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the rotation to be applied, in terms of azimuth, elevation and roll. Note that this feature is available only if 3D is supported on the target platform.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scale" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the scale factors to be applied in the x, y and z axes (values must be positive)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="displacements" type="displacementsList" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Optional set of displacements that will modify the base placement according to the value of some field, variable or expression.  </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="offset" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>offset from local coordinate origin to be used as anchor point for positioning the element (e.g. the point about which rotations, scales are applied).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="extent" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the maximum bounding area that can be used to render the object. This is calculated automatically for NDIs. Text labels must either be given an extent, or set an extentHint in the classes section.  For lengthy text, you can specify an explicit extent to fit the text in or force it to wrap onto several lines</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="effectUniforms" type="uniformSettingsList" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Assign values to uniforms appropriate to the custom visualEffect selected for this component.  These uniforms are interpolatable, therefore the values can be set on a per-layout basis.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+		<xs:attribute name="opacity" type="zeroToOne" use="optional" default="1.0">
+			<xs:annotation>
+				<xs:documentation>Sets the opacity (with 0 being invisible and 1 being solid)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="color" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Sets the color of the element.  The color value is token replaced once when the template is loaded. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="color2" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Sets the lights ambient color.  (Only supported by light elements).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="intensity" type="xs:float">
+			<xs:annotation>
+				<xs:documentation>Sets the intensity of the light.  (Only supported by light elements).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="frame" type="xs:unsignedInt" use="optional" default="1">
+			<xs:annotation>
+				<xs:documentation>For graphic elements that include multiple frames, this specifies which frame number to use</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="placementAggType" ecore:name="PlacementAggregate">
+		<xs:all>
+			<xs:element name="location" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the location. Furniture and detail element locations are specified relative to their parent (by default, the page), menu item element locations are specified relative to the menu or (if present) the slot</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="orientation" type="orientationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the rotation to be applied, in terms of azimuth, elevation and roll. Note that this feature is available only if 3D is supported on the target platform.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="scale" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the scale factors to be applied in the x, y and z axes (values must be positive)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="displacements" type="displacementsList" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Optional set of displacements that will modify the base placement according to the value of the named fields.  Note that it is not permitted to use multiple displacements using the same field name.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+		<xs:attribute name="opacity" type="zeroToOne" use="optional" default="1.0">
+			<xs:annotation>
+				<xs:documentation>Sets the opacity (with 0 being invisible and 1 being solid)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:group name="elementList">
+		<xs:annotation>
+			<xs:documentation>A list of graphical elements</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="element" ecore:name="elementLayouts">
+					<xs:annotation>
+						<xs:documentation>Indicates the placement of the specified element or group class in this layout</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="ElementLayout">
+						<xs:complexContent>
+							<xs:extension base="placementElemType">
+								<xs:attribute name="class" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>The class name to position.  this may be an element or a group/component.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="hide" ecore:name="hiddenElements">
+					<xs:annotation>
+						<xs:documentation>Indicates that the specified class should be hidden in this layout</xs:documentation>
+					</xs:annotation>
+					<xs:complexType ecore:name="HiddenElement">
+						<xs:attribute name="class" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>The class name to hide.  this may be an element or a group/component.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="unload" type="xs:boolean" default="false">
+							<xs:annotation>
+								<xs:documentation>Specifies whether the hidden element or group should release attached resources in this layout.  For components, this will cause the component instance to be torn down.  For elements this will typically cause the resource to be freed.  This may improve RAM usage figures, at the cost of latency when changing layouts.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="itemType" ecore:name="BasicItemLayout">
+		<xs:sequence>
+			<xs:element name="slot" type="placementAggType" minOccurs="0" ecore:name="slotLayout">
+				<xs:annotation>
+					<xs:documentation>Indicates a default placement for all item element classes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="elementList" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="placementCurveKeyframeType">
+		<xs:all>
+			<xs:element name="location" type="xyzType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the location as an offset from the base tween</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="rotation" type="rotationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies the rotation as a multiplier to the base tween</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+		<xs:attribute name="position" type="floatPercent" use="required">
+			<xs:annotation>
+				<xs:documentation>Specifies the time of the keyframe as a percentage of the overall transition</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="curveKeyframeList">
+		<xs:sequence>
+			<xs:element name="keyframe" type="placementCurveKeyframeType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Specifies one keyframe in a sequence representing a curve</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="displacementsList">
+		<xs:sequence>
+			<xs:element name="displacement" type="displacementType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="displacementType">
+		<xs:attribute name="animation" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>This is the name of the animation that will displace the placement.  Displacements are inherited like any other layout feature - to disable a displacement inherited from a parent layout, use the relevant field attribute, but omit the animation attribute.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>This is the field, variable, constant or expression that generates the current displacement value.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="max" type="xs:float" use="required">
+			<xs:annotation>
+				<xs:documentation>Maximum value the the 'value' expression can take.  If 'value' exceeds the 'max' figure, then the 'max' figure will be used (so the 100.0 position frame will be used).  This attribute is a constant - expressions, variables or fields are not permitted to be used.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="min" type="xs:float" use="required">
+			<xs:annotation>
+				<xs:documentation>Minimum value the the 'value' expression can take.  If 'value' is less than the 'min' figure, then the 'min' figure will be used (so the 0.0 position frame will be used).  This attribute is a constant - expressions, variables or fields are not permitted to be used.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="eventType" ecore:name="LayoutEvent">
+		<xs:sequence>
+			<xs:element name="guard" type="guardType" minOccurs="0" maxOccurs="unbounded" ecore:name="guards">
+				<xs:annotation>
+					<xs:documentation>A guard specifies the actions to perform for the event based on a condition. Multiple guards can be given per event and they are evaluated in the order they are specified. The first guard whose condition evaluates to true will be used to invoke the set commands or the action specified.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="guardType" ecore:name="EventGuard">
+		<xs:sequence>
+			<xs:element name="set" minOccurs="0" maxOccurs="unbounded" ecore:name="setActions">
+				<xs:annotation>
+					<xs:documentation>Used to assign a value to a field or variable.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType ecore:name="SetFieldAction">
+					<xs:attribute name="name" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>The name of the field or variable to assign a value to</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="value" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>An expression which is evaluated and the value is assigned to the field or parameter with the name 'name'</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="condition" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>This is a logical expression that must evaluate to true when the event occurs for the assignments and action to occur.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="action" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The name of the action to invoke if the condition evaluates to true</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,54 @@
+                    newMode,
+                    cacheElement->renderContextObject);
+        }
+
+        (*jniEnv)->DeleteLocalRef(jniEnv, frameBuffer);
+    }
+    else if (newMode == IFX_MODE_ELEMENT_BUFFERED_AND_DIRECT)
+    {
+        IFX_DIRECT_RENDER_CONTEXT* renderContextPtr = (IFX_DIRECT_RENDER_CONTEXT*)pContext;
+
+        renderContextObject = (*jniEnv)->NewObject(jniEnv, IfxDisplayCallbacks.DirectContextClass,
+                IfxDisplayCallbacks.DirectContextConstructor,
+                renderContextPtr->pDisplay->frameBuffer,
+                renderContextPtr->iClipWidth,
+                renderContextPtr->iClipHeight);
+        if (renderContextObject == NULL)
+        {
+            return IFX_ERROR;
+        }
+        else
+        {
+            cacheElement->renderContextObject = (*jniEnv)->NewGlobalRef(jniEnv, renderContextObject);
+            (*jniEnv)->DeleteLocalRef(jniEnv, renderContextObject);
+        }
+
+        IFX_DISPLAY* pDisplay = renderContextPtr->pDisplay;
+        jobject ifxDisplayObj = (*jniEnv)->NewObject(jniEnv, IfxDisplayCallbacks.IfxDisplayClass,
+                IfxDisplayCallbacks.IfxDisplayConstructor,
+                pDisplay->rotation,
+                pDisplay->width,
+                pDisplay->height,
+                pDisplay->stride,
+                pDisplay->offsetX,
+                pDisplay->offsetY,
+                pDisplay->renderFull);
+
+        (*jniEnv)->SetObjectField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.DirectContextPDisplay, ifxDisplayObj);
+
+        // If the buffer already exists then destroy it.
+        if (cacheElement->byteBufferObject != NULL)
+        {
+            (*jniEnv)->DeleteGlobalRef(jniEnv, cacheElement->byteBufferObject);
+        }
+
+        // Buffer Mapping
+        jlong capacity = pDisplay->width * pDisplay->height * sizeof(IFX_UINT32);
+        jobject frameBuffer = (*jniEnv)->NewDirectByteBuffer(jniEnv, pDisplay->frameBuffer, capacity);
+        cacheElement->byteBufferObject = (*jniEnv)->NewGlobalRef(jniEnv, frameBuffer);
+        if (cacheElement->byteBufferObject != NULL)
+        {
+            (*jniEnv)->SetObjectField(jniEnv, ifxDisplayObj, IfxDisplayCallbacks.IfxDisplayFrameBuffer, cacheElement->byteBufferObject);
+
+            status = (*jniEnv)->CallIntMethod(jniEnv,
+                    cacheElement->elementObject,

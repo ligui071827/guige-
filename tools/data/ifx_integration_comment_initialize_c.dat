@@ -1,0 +1,25 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_Initialize                                                  */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*     This function is called by the Engine immediately after           */
+/*     the integration layer is loaded. It can be used to do any         */
+/*     required initialization.                                          */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hIfx                                A handle that the IL should  */
+/*                                          use in future to identify    */
+/*                                          itself to UI Engine          */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      phSession                           IL Session handle            */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

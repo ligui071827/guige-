@@ -1,0 +1,53 @@
+{
+    IFX_RETURN_STATUS status = IFX_ERROR;
+
+    if (hModule == NULL || hElement == NULL)
+    {
+        return IFX_ERROR;
+    }
+
+    jobject renderContextObject;
+    JNIEnv* jniEnv;
+    if (0 != (*global_ptr_JVM)->AttachCurrentThreadAsDaemon(global_ptr_JVM, &jniEnv, NULL))
+        return IFX_ERROR;
+
+    CACHE_MODULE* cacheModule = (CACHE_MODULE*)hModule;
+    CACHE_ELEMENT* cacheElement = (CACHE_ELEMENT*)hElement;
+
+    if (newMode == IFX_MODE_ELEMENT_BUFFERED_NORMAL)
+    {
+        IFX_BUFFERED_RENDER_CONTEXT* renderContextPtr = (IFX_BUFFERED_RENDER_CONTEXT*)pContext;
+
+        /* Create a render context class */
+        renderContextObject = (*jniEnv)->NewObject(jniEnv, IfxDisplayCallbacks.BufferedContextClass,
+                IfxDisplayCallbacks.BufferedContextConstructor,
+                renderContextPtr->format,
+                pContext,
+                renderContextPtr->width,
+                renderContextPtr->height);
+        if (renderContextObject == NULL)
+        {
+            return IFX_ERROR;
+        }
+        else
+        {
+            cacheElement->renderContextObject = (*jniEnv)->NewGlobalRef(jniEnv, renderContextObject);
+            (*jniEnv)->DeleteLocalRef(jniEnv, renderContextObject);
+        }
+
+        // If the buffer already exists then destroy it.
+        if (cacheElement->byteBufferObject != NULL)
+        {
+            (*jniEnv)->DeleteGlobalRef(jniEnv, cacheElement->byteBufferObject);
+        }
+
+        /* Buffer Mapping */
+        jlong capacity = renderContextPtr->width * renderContextPtr->height * sizeof(IFX_UINT32);
+        jobject frameBuffer = (*jniEnv)->NewDirectByteBuffer(jniEnv, renderContextPtr->pBuffer, capacity);
+        cacheElement->byteBufferObject = (*jniEnv)->NewGlobalRef(jniEnv, frameBuffer);
+        if (cacheElement->byteBufferObject != NULL)
+        {
+            (*jniEnv)->SetObjectField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.BufferedContextPBuffer, cacheElement->byteBufferObject);
+
+            status = (*jniEnv)->CallIntMethod(jniEnv,
+                    cacheElement->elementObject,

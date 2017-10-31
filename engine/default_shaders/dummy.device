@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deviceDefinition name="Dummy device" description="Dummy device definition." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="inflexion_2.0/deviceDefinition.xsd">
+	<supportedLanguages>
+		<support language="en"/>
+	</supportedLanguages>
+	<displays>
+		<display name="Primary" defaultMode="QVGA_P">
+			<support mode="QVGA_P"/>
+		</display>
+	</displays>
+	<languages>
+		<language name="en" description="English"/>
+	</languages>
+	<displayModes>
+		<displayMode name="QVGA_P"  width="240" height="320" designSize="QVGA_P" description="QVGA Portrait"/>
+	</displayModes>
+	<designSizes>
+		<designSize name="QVGA_P" width="240" height="320" origin="160" description="QVGA Portrait"/>
+	</designSizes>
+</deviceDefinition>

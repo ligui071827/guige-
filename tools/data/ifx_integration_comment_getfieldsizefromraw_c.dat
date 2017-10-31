@@ -1,0 +1,30 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_GetFieldSizeFromRaw                                         */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Engine whenever it needs          */
+/*      to retrieve field data, for a given raw value.  It should return */
+/*      the buffer size required, including the null terminator, to      */
+/*      store the requested field data.                                  */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      type                                Type of data being queried   */
+/*      hElement                            Element handle, if available */
+/*      hMenu                               Menu handle, if available    */
+/*      item                                Item number, if available    */
+/*      szField                             Name of field                */
+/*      value                               Raw value of field           */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pSize                               Size of field data           */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

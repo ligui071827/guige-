@@ -1,0 +1,16 @@
+                cacheElement->renderContextObject);
+
+
+        jobject frameBuffer = (*jniEnv)->GetObjectField(jniEnv, cacheElement->renderContextObject, IfxDisplayCallbacks.BufferedContextPBuffer);
+
+        if (frameBuffer != NULL) {
+            cacheElement->ifxRenderContext.savedElementBufferedContext->pBuffer = (*jniEnv)->GetDirectBufferAddress(jniEnv, frameBuffer);
+        }
+
+        (*jniEnv)->DeleteLocalRef(jniEnv, frameBuffer);
+    }
+
+    else
+    {
+        status = (*jniEnv)->CallIntMethod(jniEnv,
+                cacheElement->elementObject, 

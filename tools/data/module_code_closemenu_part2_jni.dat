@@ -1,0 +1,13 @@
+            (jobject)hMenu);
+
+    if (status == IFX_SUCCESS && hMenu != NULL)
+    {
+        (*jniEnv)->DeleteGlobalRef(jniEnv, (jobject)hMenu);
+    }
+    else
+    {
+        status = IFX_ERROR;
+    }
+
+    return status;
+}

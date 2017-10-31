@@ -1,0 +1,24 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_GetLinkTypeData                                             */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called once per link type, to query the name    */
+/*      and mode of each link type.                                      */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      item                                Link type index (from 0)     */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      szLinkType                          Link type name               */
+/*      pLinkMode                           Link type mode               */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" ecore:nsPrefix="UID">
+	<xs:annotation>
+		<xs:documentation/>
+	</xs:annotation>
+	<xs:include schemaLocation="common.xsd"/>
+	<xs:include schemaLocation="layouts.xsd"/>
+	<xs:complexType name="designType">
+		<xs:sequence>
+			<xs:element name="path" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="points">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="point" type="xyzType" minOccurs="0" maxOccurs="unbounded"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="attached" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="orientation" type="orientationType" minOccurs="0"/>
+									<xs:element name="element" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType ecore:name="AttachedElement">
+											<xs:attribute name="slot" type="xs:unsignedInt" use="required"/>
+											<xs:attribute name="position" type="xs:float" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="class" type="xs:string"/>
+								<xs:attribute name="alignOrientation" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="location" type="xyzType" minOccurs="0"/>
+						<xs:element name="scale" type="xyzType" minOccurs="0"/>
+						<xs:element name="orientation" type="orientationType" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="name" type="xs:string" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="menuEditorSettings" ecore:name="MenuEditorSettings">
+		<xs:annotation>
+			<xs:documentation>Stores Menu Editor specific settings. User should not modify this block.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="furnitureField" type="fieldSettings" minOccurs="0" maxOccurs="unbounded" ecore:name="furnitureFields">
+				<xs:annotation>
+					<xs:documentation>Contains meta-data for a furniture item field.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="menuField" type="fieldSettings" minOccurs="0" maxOccurs="unbounded" ecore:name="menuFields">
+				<xs:annotation>
+					<xs:documentation>Contains meta-data for a menu item field.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="fieldSettings" ecore:name="FieldSettings">
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of the field to which these settings apply.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="fieldClassType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The type of the field, could be text, graphic or plugin</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="dataType" type="valueType" default="string">
+			<xs:annotation>
+				<xs:documentation>The data type of the field. If this is missing, the data type is assumed to be 'string'.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="tokenized" type="xs:boolean" use="optional" default="true">
+			<xs:annotation>
+				<xs:documentation>Specifies whether the field should be tokenized or not. All fields are tokenized by default.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="fieldClassType" ecore:name="FieldType">
+		<xs:annotation>
+			<xs:documentation>
+				Defines the types that a menu item field can have.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="text"/>
+			<xs:enumeration value="graphic"/>
+			<xs:enumeration value="plugin"/>
+			<xs:enumeration value="touchRegion"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tokenEditorSettings" ecore:name="TokenEditorSettings">
+		<xs:attribute name="lastAutoTokenIndex" type="xs:long"/>
+	</xs:complexType>
+	<xs:complexType name="classesSettings" ecore:name="ClassesEditorSettings">
+		<xs:sequence>
+			<xs:element name="settings" type="classSettings" minOccurs="0" maxOccurs="unbounded" ecore:name="classSettings">
+				<xs:annotation>
+					<xs:documentation>Settings for all classes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="classSettings">
+		<xs:all>
+			<xs:element name="attenuationSettings">
+				<xs:complexType ecore:name="DistanceAttenuationSettings">
+					<xs:attribute name="fallOffDistance" type="xs:float" default="Infinity">
+						<xs:annotation>
+							<xs:documentation>Distance at which the light falls to zero. Defaults to infinity.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="halfFallOffDistance" type="xs:float">
+						<xs:annotation>
+							<xs:documentation>Distance at which the light intensity falls to 50%.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
+		<xs:attribute name="class" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Name of the class these settings are for</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="slot" type="xs:unsignedInt" use="optional">
+			<xs:annotation>
+				<xs:documentation>Slot number, if this class is an item class. Each slot can have different settings for the same class.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="visibility" type="classVisibilityState" use="optional">
+			<xs:annotation>
+				<xs:documentation>Controls the visibility of this class in Template editor's layout page</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="locked" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>Controls the locking of this class in Template editor's layout page</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="attenuationFactor" type="xs:float" default="0">
+			<xs:annotation>
+				<xs:documentation>Light attenuation value range between 0 - 99.9. Default value is 0.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="classVisibilityState">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="separate"/>
+			<xs:enumeration value="combined"/>
+			<xs:enumeration value="hidden"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="componentSettings">
+		<xs:sequence>
+			<xs:element name="previewContext" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Stores information about parent editors required for previewing this component.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType  ecore:name="PreviewContext">
+					<xs:sequence>
+						<xs:annotation>
+							<xs:documentation></xs:documentation>
+						</xs:annotation>
+						<xs:element name="parentTemplate" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation></xs:documentation>
+							</xs:annotation>
+							<xs:complexType ecore:name="ParentTemplateDescription">
+								<xs:attribute name="path" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>The workspace relative path of a template (page/component) that instantiates this component and is currently being used as preview harness for this component.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="layout" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>The name of the layout in the parent template which is currently being used as preview harness for this component.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="componentClass" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>The name of the class in the parent template that designates the instance of this component which is used for preview context.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="slot" type="xs:unsignedInt">
+									<xs:annotation>
+										<xs:documentation>The slot in the parent template that designates the instance of this component which is used for preview context.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="identifier" type="xs:unsignedInt" use="required">
+									<xs:annotation>
+										<xs:documentation>Internally used by engine</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="lastLayout" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>The name of the last layout selected in this component for editing.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>A user-friendly name for the component that is defined by this template file. The name must be defined if this template file defines a component.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="icon" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>A path relative to this component's project of a thumbnail image for the component to be displayed in the palette.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>An optional descriptive text for the component that might be presented to the user.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>

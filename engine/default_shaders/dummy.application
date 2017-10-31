@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applicationDefinition name="Dummy application definition" GUID="ifxui_demo" deviceDefinition="dummy.device" packageName="com.mentorgraphics.inflexionui.module" description="dummy application definition." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="inflexion_2.0/applicationDefinition.xsd">
+</applicationDefinition>

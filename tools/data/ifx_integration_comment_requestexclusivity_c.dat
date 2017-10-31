@@ -1,0 +1,26 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_<module>_RequestExclusivity                                 */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called by the Integrated Module to request      */
+/*      exclusivity.                                                     */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            Session ID                   */
+/*      priority                            The priority of the module   */
+/*      timeout                             Time in milliseconds to wait */
+/*                                          to gain exclusivity before   */
+/*                                          returning if exclusivity can */
+/*                                          not be gained                */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

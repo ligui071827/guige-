@@ -1,0 +1,90 @@
+/*************************************************************************/
+/*                                                                       */
+/* FILE NAME                                               VERSION       */
+/*                                                                       */
+/*      ifxui_integration.c                                  2.6.0       */
+/*                                                                       */
+/* COMPONENT                                                             */
+/*                                                                       */
+/*      IFXI Inflexion UI Engine Integration Layer                       */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This file contains the integration layer between Inflexion       */
+/*      UI Engine and the integrated modules.                            */
+/*                                                                       */
+/* DATA STRUCTURES                                                       */
+/*                                                                       */
+/*      tagIFXI_SESSION                                                  */
+/*                                                                       */
+/* FUNCTIONS                                                             */
+/*                                                                       */
+/*      IFXI_Initialize                                                  */
+/*      IFXI_ShutDown                                                    */
+/*      IFXI_ValidateGUID                                                */
+/*      IFXI_GetLinkTypeCount                                            */
+/*      IFXI_GetLinkTypeData                                             */
+/*      IFXI_GetExclusivityCount                                         */
+/*      IFXI_OpenMenu                                                    */
+/*      IFXI_CloseMenu                                                   */
+/*      IFXI_GetItemCount                                                */
+/*      IFXI_GetFirstActiveItem                                          */
+/*      IFXI_ExecuteLink                                                 */
+/*      IFXI_CreateElement                                               */
+/*      IFXI_DestroyElement                                              */
+/*      IFXI_ActivateElement                                             */
+/*      IFXI_DeactivateElement                                           */
+/*      IFXI_SetElementFocus                                             */
+/*      IFXI_UnsetElementFocus                                           */
+/*      IFXI_ProcessElementKeyUpEvent                                    */
+/*      IFXI_ProcessElementKeyDownEvent                                  */
+/*      IFXI_ProcessElementStylusDragEvent                               */
+/*      IFXI_ProcessElementStylusUpEvent                                 */
+/*      IFXI_ProcessElementStylusDownEvent                               */
+/*      IFXI_ProcessElementStylusCancelEvent                             */
+/*      IFXI_GetElementCaretPosition                                     */
+/*      IFXI_PositionElement                                             */
+/*      IFXI_PaintElement                                                */
+/*      IFXI_ChangeElementMode                                           */
+/*      IFXI_BufferCreateString                                          */
+/*      IFXI_BufferDestroy                                               */
+/*      IFXI_BufferSetFocus                                              */
+/*      IFXI_BufferUnsetFocus                                            */
+/*      IFXI_<module>_RequestExclusivity                                 */
+/*      IFXI_<module>_ReleaseExclusivity                                 */
+/*      IFXI_CallExclusivityStatusChange                                 */
+/*      IFXI_GetFieldSize                                                */
+/*      IFXI_RequestFieldRefresh                                         */
+/*      IFXI_HuiFromSession                                              */
+/*      IFXI_CacheStrFromSession                                         */
+/*      IFXI_GetFieldInfo                                                */
+/*      IFXI_GetFieldRaw                                                 */
+/*      IFXI_SetFieldRaw                                                 */
+/*      IFXI_GetFieldSizeFromRaw                                         */
+/*      IFXI_ExclSessionFromSession                                      */
+/*      IL_GetElementFieldSize                                           */
+/*      IL_GetItemFieldSize                                              */
+/*      IL_GetMenuFieldSize                                              */
+/*      IL_GetGlobalFieldSize                                            */
+/*      IL_GetElementFieldRaw                                            */
+/*      IL_GetItemFieldRaw                                               */
+/*      IL_GetMenuFieldRaw                                               */
+/*      IL_GetGlobalFieldRaw                                             */
+/*      IL_SetElementFieldRaw                                            */
+/*      IL_SetItemFieldRaw                                               */
+/*      IL_SetMenuFieldRaw                                               */
+/*      IL_SetGlobalFieldRaw                                             */
+/*      IL_GetItemFieldSizeFromRaw                                       */
+/*      IL_GetMenuFieldSizeFromRaw                                       */
+/*      IL_GetGlobalFieldSizeFromRaw                                     */
+/*                                                                       */
+/* DEPENDENCIES                                                          */
+/*                                                                       */
+/*      ifxui_defs.h                        Platform Definitions         */
+/*      ifxui_rtl.h                         RTL functions                */
+/*      ifxui_uriparser.h                   URI Parser                   */
+/*      ifxui_integration.h                 API to the Engine            */
+/*      ifxui_module_integration.h          API from modules             */
+/*                                                                       */
+/*************************************************************************/
+

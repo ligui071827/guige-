@@ -1,0 +1,25 @@
+/*************************************************************************/
+/*                                                                       */
+/* FUNCTION                                                              */
+/*                                                                       */
+/*      IFXI_ProcessElementKeyDownEvent                                  */
+/*                                                                       */
+/* DESCRIPTION                                                           */
+/*                                                                       */
+/*      This function is called when a key down event is received by the */
+/*      UI Engine and there is a focused element                         */
+/*                                                                       */
+/* INPUTS                                                                */
+/*                                                                       */
+/*      hSession                            IL Session                   */
+/*      hElement                            Element handle               */
+/*      key                                 Key scancode                 */
+/*                                                                       */
+/* OUTPUTS                                                               */
+/*                                                                       */
+/*      pConsumed                           Whether key event has been   */
+/*                                          consumed                     */
+/*      IFX_SUCCESS                         If successful                */
+/*      IFX_ERROR                           Any error                    */
+/*                                                                       */
+/*************************************************************************/

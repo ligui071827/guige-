@@ -1,0 +1,8 @@
+        pProperty->mode = (*jniEnv)->GetIntField(jniEnv, propertyObj, PropertyCallbacks.Mode);
+        pProperty->requiredBufferWidth = (*jniEnv)->GetIntField(jniEnv, propertyObj, PropertyCallbacks.RequiredBufferWidth);
+        pProperty->requiredBufferHeight = (*jniEnv)->GetIntField(jniEnv, propertyObj, PropertyCallbacks.RequiredBufferHeight);
+        pProperty->translucency = (*jniEnv)->GetIntField(jniEnv, propertyObj, PropertyCallbacks.Translucency);
+        pProperty->hasPreMultipliedAlpha = (*jniEnv)->GetIntField(jniEnv, propertyObj, PropertyCallbacks.HasPreMultipliedAlpha);
+
+        /* Save the element mode. */
+        cacheElement->currentMode = pProperty->mode;
