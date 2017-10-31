@@ -133,3 +133,4 @@ endif
 HOST_TMP = $(subst -foo,,$(notdir $(CROSS_TOOLCHAIN))foo)
 HOST = $(subst foo,,$(HOST_TMP))
 
+buzhid
